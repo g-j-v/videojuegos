@@ -15,7 +15,12 @@ public class playerActions : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
+	}
+	
+	void FixedUpdate()
+	{
 		moveDirection = new Vector3(-1.0f*Input.GetAxis("Horizontal"), 0, 0);
 		moveDirection = transform.TransformDirection(moveDirection);
 		moveDirection *= speed;
