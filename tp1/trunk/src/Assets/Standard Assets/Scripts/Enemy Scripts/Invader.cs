@@ -5,6 +5,7 @@ public class Invader : MonoBehaviour {
 	private int invaderID;
 	private float speed;
 	private Vector3 oldVelocity;
+	public GameObject rocketPrefab;
 	
 	// Use this for initialization
 	void Start () 
@@ -14,8 +15,19 @@ public class Invader : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
+		float fireConstraint = Random.value;
+		
+		if (fireConstraint < 0.00025f && InvadersGameData.canFire(this.invaderID))
+		{
+			Debug.Log("Disparando!!!");
+			Vector3 rPosition = transform.position;
+			rPosition.x -= 1.5f;
+			// logica de disparo
+			Instantiate(rocketPrefab, rPosition, Quaternion.identity);
+		}
+			
 	}
 	
 	void FixedUpdate ()
@@ -42,10 +54,8 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) 
 	{
-        Debug.Log("Collide!");
 		if (InvadersGameData.directionChanged == false)
 		{
-			Debug.Log("changing direction!");
         	InvadersGameData.invadersDirection *= -1.0f;
 			InvadersGameData.directionChanged = true;
 			InvadersGameData.descendInvaders();
@@ -54,7 +64,6 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerExit(Collider other) 
 	{
-		Debug.Log("Collide Exit!");
         InvadersGameData.directionChanged = false;
 		rigidbody.velocity = oldVelocity;
 	}

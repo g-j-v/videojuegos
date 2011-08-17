@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class InvadersGameData : MonoBehaviour {
     private const int invaderQty = 64;
-    private const int invaderRowQty = 12;
+    private const int invaderRowQty = 16;
 	private const float descendDistance = 1.0f;
-    private bool[] armedInvaders;
+    private static bool[] armedInvaders;
 	public static float invadersDirection;
+	public static float rocketsDirection;
 	public static bool directionChanged;
 	public Invader invaderPrefab;
 	
@@ -13,6 +14,7 @@ public class InvadersGameData : MonoBehaviour {
 	void Start () 
     {
 		invadersDirection = 1.0f;
+		rocketsDirection = -2.0f;
 		directionChanged = false;
 		
 		// Instantiates prefabs in a 16x4 grid
@@ -46,7 +48,7 @@ public class InvadersGameData : MonoBehaviour {
             armedInvaders[i] = false;
         }
 
-        for (i = invaderRowQty * 3; i < invaderRowQty; i++)
+        for (i = invaderRowQty * 3; i < invaderQty; i++)
         {
             armedInvaders[i] = true;
         }
@@ -56,7 +58,7 @@ public class InvadersGameData : MonoBehaviour {
     {
 	}
 	
-    public bool canFire(int invaderID)
+    public static bool canFire(int invaderID)
     {
         return armedInvaders[invaderID];
     }
