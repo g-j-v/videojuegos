@@ -6,7 +6,6 @@ public class InvadersGameData : MonoBehaviour {
 	private const float descendDistance = 1.0f;
     private static bool[] armedInvaders;
 	public static float invadersDirection;
-	public static float rocketsDirection;
 	public static bool directionChanged;
 	public Invader invaderPrefab;
 	
@@ -14,7 +13,6 @@ public class InvadersGameData : MonoBehaviour {
 	void Start () 
     {
 		invadersDirection = 1.0f;
-		rocketsDirection = -2.0f;
 		directionChanged = false;
 		
 		// Instantiates prefabs in a 16x4 grid
