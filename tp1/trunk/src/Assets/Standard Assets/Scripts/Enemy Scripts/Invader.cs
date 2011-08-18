@@ -5,7 +5,7 @@ public class Invader : MonoBehaviour {
 	private int invaderID;
 	private float speed;
 	private Vector3 oldVelocity;
-	public GameObject rocketPrefab;
+	public Rocket rocketPrefab;
 	
 	// Use this for initialization
 	void Start () 
@@ -25,7 +25,7 @@ public class Invader : MonoBehaviour {
 			Vector3 rPosition = transform.position;
 			rPosition.x -= 1.5f;
 			// logica de disparo
-			Instantiate(rocketPrefab, rPosition, Quaternion.identity);
+			Instantiate(rocketPrefab, rPosition, Quaternion.Euler(0,0,270));
 		}
 			
 	}
@@ -36,7 +36,7 @@ public class Invader : MonoBehaviour {
 		moveDirection = new Vector3(InvadersGameData.invadersDirection, 0, 0);
 		moveDirection = transform.TransformDirection(moveDirection);
 		moveDirection *= speed;
-		oldVelocity = rigidbody.velocity = moveDirection * Time.deltaTime;
+		rigidbody.velocity = moveDirection * Time.deltaTime;
 	}
 	
 	// ID del invader
@@ -54,7 +54,7 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) 
 	{
-		if (InvadersGameData.directionChanged == false)
+		if (InvadersGameData.directionChanged == false && other.name == "HorizontalInvisibleWall")
 		{
         	InvadersGameData.invadersDirection *= -1.0f;
 			InvadersGameData.directionChanged = true;
@@ -64,8 +64,10 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerExit(Collider other) 
 	{
-        InvadersGameData.directionChanged = false;
-		rigidbody.velocity = oldVelocity;
+		if (other.name == "HorizontalInvisibleWall")
+		{
+	        InvadersGameData.directionChanged = false;
+		}
 	}
 	
 	public void descend(float distance)

@@ -3,11 +3,12 @@ using System.Collections;
 
 public class Rocket : MonoBehaviour {
 	private float speed;
-	private Vector3 oldVelocity;
+	private float rocketsDirection;
 	
 	// Use this for initialization
 	void Start () {
 		speed = 100.0f;
+		rocketsDirection = 2.0f;
 		Debug.Log("rocket created\n");
 	}
 	
@@ -19,9 +20,9 @@ public class Rocket : MonoBehaviour {
 	void FixedUpdate ()
 	{
 		Vector3 moveDirection;
-		moveDirection = new Vector3(0, InvadersGameData.rocketsDirection, 0);
+		moveDirection = new Vector3(rocketsDirection,0,0);
 		moveDirection = transform.TransformDirection(moveDirection);
 		moveDirection *= speed;
-		oldVelocity = rigidbody.velocity = moveDirection * Time.deltaTime;
+		rigidbody.velocity = moveDirection * Time.deltaTime;
 	}
 }
