@@ -10,7 +10,7 @@ public class Invader : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		speed = 100.0f;
+		speed = 80.0f;
 		Debug.Log("invader created\n");
 	}
 	
@@ -54,7 +54,7 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) 
 	{
-		if (InvadersGameData.directionChanged == false && other.name == "HorizontalInvisibleWall")
+		if (InvadersGameData.directionChanged == false)
 		{
         	InvadersGameData.invadersDirection *= -1.0f;
 			InvadersGameData.directionChanged = true;
@@ -64,10 +64,7 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerExit(Collider other) 
 	{
-		if (other.name == "HorizontalInvisibleWall")
-		{
-	        InvadersGameData.directionChanged = false;
-		}
+		InvadersGameData.directionChanged = false;
 	}
 	
 	public void descend(float distance)

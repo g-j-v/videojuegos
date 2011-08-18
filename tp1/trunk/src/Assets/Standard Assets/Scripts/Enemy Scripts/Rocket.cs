@@ -25,4 +25,16 @@ public class Rocket : MonoBehaviour {
 		moveDirection *= speed;
 		rigidbody.velocity = moveDirection * Time.deltaTime;
 	}
+	
+	void OnTriggerEnter(Collider other)
+	{
+		GameObject player;
+		player = other.gameObject;
+		
+		if (player != null)
+		{
+			Destroy(player);
+			Destroy(this.gameObject); // Destruye el Rocket
+		}
+	}
 }
