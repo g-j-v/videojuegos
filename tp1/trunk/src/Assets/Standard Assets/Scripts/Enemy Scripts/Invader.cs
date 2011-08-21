@@ -6,6 +6,7 @@ public class Invader : MonoBehaviour {
 	private float speed;
 	private Vector3 oldVelocity;
 	public Rocket rocketPrefab;
+	public Nuke nukePrefab;
 	public GameObject detonation; 
 	
 	// Use this for initialization
@@ -20,12 +21,20 @@ public class Invader : MonoBehaviour {
 	{
 		float fireConstraint = Random.value;
 		
-		if (fireConstraint < 0.00025f && InvadersGameData.canFire(this.invaderID))
+		if (fireConstraint < 0.0025f && InvadersGameData.canFire(this.invaderID))
 		{
 			Vector3 rPosition = transform.position;
 			rPosition.x -= 1.5f;
 			// logica de disparo
-			Instantiate(rocketPrefab, rPosition, Quaternion.Euler(0,0,270));
+			
+			if (fireConstraint < 0.00025f)
+			{
+				Instantiate(nukePrefab, rPosition, Quaternion.identity);
+			}
+			else
+			{
+				Instantiate(rocketPrefab, rPosition, Quaternion.Euler(0,0,270));
+			}
 		}
 			
 	}

@@ -66,14 +66,14 @@ public class InvadersGameData : MonoBehaviour {
 	public static void notifyDecease(int invaderID)
 	{
 		int currRow = invaderID / invaderRowQty + 1;
+		changeArmedStatus(invaderID, false);
 		if (currRow > 1)
 		{
 			int triggerID = invaderID - invaderRowQty;
-			changeArmedStatus(invaderID, false);
 			
 			// Evita que si se mata un invader de la fila del medio, el de arriba dispare si el de la 
 			// tercera sigue vivo
-			if (currRow != 2 || canFire(invaderID + invaderRowQty))
+			if (currRow != 2 || !canFire(invaderID + invaderRowQty))
 			{
 				changeArmedStatus(triggerID, true);
 			}
