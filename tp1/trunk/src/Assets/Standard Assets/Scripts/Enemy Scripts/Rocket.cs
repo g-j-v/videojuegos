@@ -5,16 +5,16 @@ public class Rocket : MonoBehaviour {
 	private float speed;
 	private float rocketsDirection;
 	
+	
 	// Use this for initialization
 	void Start () {
 		speed = 100.0f;
 		rocketsDirection = 2.0f;
-		Debug.Log("rocket created\n");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 	
 	void FixedUpdate ()
@@ -26,15 +26,10 @@ public class Rocket : MonoBehaviour {
 		rigidbody.velocity = moveDirection * Time.deltaTime;
 	}
 	
-	void OnTriggerEnter(Collider other)
+	void OnTriggerEnter(Collider other) 
 	{
-		GameObject player;
-		player = other.gameObject;
-		
-		if (player != null)
-		{
-			Destroy(player);
-			Destroy(this.gameObject); // Destruye el Rocket
-		}
+		playerActions pa = other.GetComponent<playerActions>();
+		pa.ExplodeAndDestroy();
+		Destroy(gameObject); // Destruye el rocket
 	}
 }
