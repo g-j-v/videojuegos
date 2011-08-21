@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class InvadersGameData : MonoBehaviour {
-    private const int invaderQty = 64;
+    private int invaderQty;
     private const int invaderRowQty = 16;
 	private const float descendDistance = 1.0f;
     private static bool[] armedInvaders;
@@ -17,7 +17,8 @@ public class InvadersGameData : MonoBehaviour {
 		
 		// Instantiates prefabs in a 16x4 grid
 		int gridX = 16;
-		int gridY = 4;
+		int gridY = 3;
+		invaderQty = gridX * gridY;
 		int i = 0;
 		float spacing = 3.5f;
 		Invader clone;
@@ -36,6 +37,7 @@ public class InvadersGameData : MonoBehaviour {
 	            Vector3 pos = new Vector3(-9.411484f + x * spacing, 41.72719f - y * spacing, 35.47127f);
 	            clone = Instantiate(invaderPrefab, pos, Quaternion.Euler(270.0f,0f,0f)) as Invader;
 				clone.InvaderID = i;
+				clone.tag = "Enemy";
 				i++;
 	        }
 	    }
@@ -46,7 +48,7 @@ public class InvadersGameData : MonoBehaviour {
             armedInvaders[i] = false;
         }
 
-        for (i = invaderRowQty * 3; i < invaderQty; i++)
+        for (i = invaderRowQty * 2; i < invaderQty; i++)
         {
             armedInvaders[i] = true;
         }
@@ -61,7 +63,24 @@ public class InvadersGameData : MonoBehaviour {
         return armedInvaders[invaderID];
     }
 	
-    public void changeArmedStatus(int invader, bool status)
+	public static void notifyDecease(int invaderID)
+	{
+		int currRow = invaderID / invaderRowQty + 1;
+		if (currRow > 1)
+		{
+			int triggerID = invaderID - invaderRowQty;
+			changeArmedStatus(invaderID, false);
+			
+			// Evita que si se mata un invader de la fila del medio, el de arriba dispare si el de la 
+			// tercera sigue vivo
+			if (currRow != 2 || canFire(invaderID + invaderRowQty))
+			{
+				changeArmedStatus(triggerID, true);
+			}
+		}
+	}
+	
+    public static void changeArmedStatus(int invader, bool status)
     {
         if (invader >= 0)
         {

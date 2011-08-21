@@ -1,2 +1,6 @@
 fileFormatVersion: 1
 guid: e619f6a3980b41640ad36ebc10c05f90
+MonoImporter:
+  importerVersion: 1
+  defaultReferences:
+    Detonation: {fileID: 100000, guid: 2a6951ec14b27ed4da27d13818dbebd2, type: 2}

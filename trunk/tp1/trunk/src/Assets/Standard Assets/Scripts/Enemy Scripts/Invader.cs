@@ -6,6 +6,7 @@ public class Invader : MonoBehaviour {
 	private float speed;
 	private Vector3 oldVelocity;
 	public Rocket rocketPrefab;
+	public GameObject detonation; 
 	
 	// Use this for initialization
 	void Start () 
@@ -21,7 +22,6 @@ public class Invader : MonoBehaviour {
 		
 		if (fireConstraint < 0.00025f && InvadersGameData.canFire(this.invaderID))
 		{
-			Debug.Log("Disparando!!!");
 			Vector3 rPosition = transform.position;
 			rPosition.x -= 1.5f;
 			// logica de disparo
@@ -54,17 +54,30 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) 
 	{
-		if (InvadersGameData.directionChanged == false)
+		if (InvadersGameData.directionChanged == false && other.tag == "Wall")
 		{
         	InvadersGameData.invadersDirection *= -1.0f;
 			InvadersGameData.directionChanged = true;
 			InvadersGameData.descendInvaders();
 		}
+		else if (other.tag == "Laser")
+		{
+			InvadersGameData.notifyDecease(this.invaderID);
+			ExplodeAndDestroy();
+		} else if (other.tag == "Player")
+		{
+			playerActions pa = other.GetComponent<playerActions>();
+			pa.ExplodeAndDestroy();
+			ExplodeAndDestroy();
+		}
     }
 	
 	void OnTriggerExit(Collider other) 
 	{
-		InvadersGameData.directionChanged = false;
+		if (other.tag == "Wall") 
+		{
+			InvadersGameData.directionChanged = false;
+		} 
 	}
 	
 	public void descend(float distance)
@@ -72,5 +85,13 @@ public class Invader : MonoBehaviour {
 		Vector3 moveDirection = transform.position;
 		moveDirection.y -= distance;
 		transform.position = moveDirection;
+	}
+	
+	private void ExplodeAndDestroy()
+	{
+		detonation.transform.position = this.rigidbody.position;
+		Detonator d = detonation.GetComponent<Detonator>();
+		d.Explode();
+		Destroy(gameObject); // Destruye el invader
 	}
 }
