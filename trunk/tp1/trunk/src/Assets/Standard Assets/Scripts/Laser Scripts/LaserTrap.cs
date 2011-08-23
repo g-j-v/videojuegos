@@ -8,6 +8,7 @@ public class LaserTrap : MonoBehaviour {
 	public float laserWidth = 12.0f;
 	public float damage = 1f;
 	public GameObject hitEffect;
+	protected bool paused;
 	
 	private float lastHitTime = 0.0f;
 	private const float laserSpeed = 1200f;
@@ -26,33 +27,51 @@ public class LaserTrap : MonoBehaviour {
 	void FixedUpdate()
 	{
 		Vector3 moveDirection;
-		moveDirection = Vector3.up;
-		moveDirection = transform.TransformDirection(moveDirection);
-		moveDirection *= laserSpeed;
-		rigidbody.velocity = moveDirection * Time.deltaTime;
+		
+		if (!paused)
+		{
+			moveDirection = Vector3.up;
+			moveDirection = transform.TransformDirection(moveDirection);
+			moveDirection *= laserSpeed;
+			rigidbody.velocity = moveDirection * Time.deltaTime;
+		}
 	}
 	
 	
 
 	void OnTriggerEnter(Collider other) 
 	{
-		Debug.Log("laser touch");
 		Vector3 pos;
-		
-		if (Time.time > lastHitTime + 0.25)
+		if (!paused)
 		{
-			if ( other.tag == "Enemy")
+			if (Time.time > lastHitTime + 0.25)
 			{
-				pos = GetComponent<Transform>().position;
-				pos.y += laserWidth/2;
-				Instantiate(hitEffect, pos, Quaternion.identity);
-				other.SendMessage("ApplyDamage", damage, SendMessageOptions.DontRequireReceiver);
-				lastHitTime = Time.time;
-				Debug.Log("destruyendome!");
-				//GetComponent(LineRenderer).SetVertexCount(0);
-				//var go = GameObject.FindObjectByType<Laser>();
-				Destroy(gameObject);
+				if ( other.tag == "Enemy")
+				{
+					pos = GetComponent<Transform>().position;
+					pos.y += laserWidth/2;
+					Instantiate(hitEffect, pos, Quaternion.identity);
+					other.SendMessage("ApplyDamage", damage, SendMessageOptions.DontRequireReceiver);
+					lastHitTime = Time.time;
+					Debug.Log("destruyendome!");
+					//GetComponent(LineRenderer).SetVertexCount(0);
+					//var go = GameObject.FindObjectByType<Laser>();
+					Destroy(gameObject);
+				} else if (other.tag == "WallDestroyer")
+				{
+					Destroy(gameObject);
+				}
 			}
 		}
+	}
+	
+	public void OnPauseGame()
+	{
+		this.paused = true;
+	}
+	
+	public void OnResumeGame()
+	{
+		this.paused = false;
 	}
 }

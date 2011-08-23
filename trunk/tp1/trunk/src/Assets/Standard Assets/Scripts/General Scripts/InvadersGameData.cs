@@ -96,4 +96,22 @@ public class InvadersGameData : MonoBehaviour {
             inv.descend(descendDistance);
         }
 	}
+	
+	public void OnPauseGame()
+	{
+		Object[] objects = FindObjectsOfType (typeof(GameObject));
+		foreach (GameObject go in objects) 
+		{
+    		go.SendMessage ("OnPauseGame", SendMessageOptions.DontRequireReceiver);
+		}
+	}
+	
+	public void OnResumeGame()
+	{
+		Object[] objects = FindObjectsOfType (typeof(GameObject));
+		foreach (GameObject go in objects) 
+		{
+    		go.SendMessage ("OnResumeGame", SendMessageOptions.DontRequireReceiver);
+		}
+	}
 }

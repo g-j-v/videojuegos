@@ -5,6 +5,7 @@ public class Nuke : MonoBehaviour {
 	public GameObject AtomicDetonation;
 	private float speed;
 	private float rocketsDirection;
+	protected bool paused;
 	
 	// Use this for initialization
 	void Start () {
@@ -20,18 +21,42 @@ public class Nuke : MonoBehaviour {
 	void FixedUpdate() 
 	{
 		Vector3 moveDirection;
-		moveDirection = new Vector3(0,rocketsDirection,0);
-		moveDirection = transform.TransformDirection(moveDirection);
-		moveDirection *= speed;
-		rigidbody.velocity = moveDirection * Time.deltaTime;	
+		
+		if (!paused)
+		{
+			moveDirection = new Vector3(0,rocketsDirection,0);
+			moveDirection = transform.TransformDirection(moveDirection);
+			moveDirection *= speed;
+			rigidbody.velocity = moveDirection * Time.deltaTime;	
+		}
 	}
 	
 	void OnTriggerEnter(Collider other) 
 	{
-		AtomicDetonation.transform.position = other.transform.position;
-		Detonator d = AtomicDetonation.GetComponent<Detonator>();
-		d.Explode();
-		Destroy(other.gameObject); // Destruye al player
-		Destroy(gameObject); // Destruye el rocket
+		if (!paused)
+		{
+			if (other.tag == "WallDestroyer")
+			{
+				Destroy(gameObject);
+			}
+			else if(other.tag == "Player")
+			{
+				AtomicDetonation.transform.position = other.transform.position;
+				Detonator d = AtomicDetonation.GetComponent<Detonator>();
+				d.Explode();
+				Destroy(other.gameObject); // Destruye al player
+				Destroy(gameObject); // Destruye el rocket
+			}
+		}
+	}
+	
+	public void OnPauseGame()
+	{
+		this.paused = true;
+	}
+	
+	public void OnResumeGame()
+	{
+		this.paused = false;
 	}
 }

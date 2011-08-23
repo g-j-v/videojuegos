@@ -5,6 +5,7 @@ public class Invader : MonoBehaviour {
 	private int invaderID;
 	private float speed;
 	private Vector3 oldVelocity;
+	protected bool paused;
 	public Rocket rocketPrefab;
 	public Nuke nukePrefab;
 	public GameObject detonation; 
@@ -21,19 +22,22 @@ public class Invader : MonoBehaviour {
 	{
 		float fireConstraint = Random.value;
 		
-		if (fireConstraint < 0.0025f && InvadersGameData.canFire(this.invaderID))
+		if (!paused)
 		{
-			Vector3 rPosition = transform.position;
-			rPosition.x -= 1.5f;
-			// logica de disparo
-			
-			if (fireConstraint < 0.00025f)
+			if (fireConstraint < 0.0025f && InvadersGameData.canFire(this.invaderID))
 			{
-				Instantiate(nukePrefab, rPosition, Quaternion.identity);
-			}
-			else
-			{
-				Instantiate(rocketPrefab, rPosition, Quaternion.Euler(0,0,270));
+				Vector3 rPosition = transform.position;
+				rPosition.x -= 1.5f;
+				// logica de disparo
+				
+				if (fireConstraint < 0.00025f)
+				{
+					Instantiate(nukePrefab, rPosition, Quaternion.identity);
+				}
+				else
+				{
+					Instantiate(rocketPrefab, rPosition, Quaternion.Euler(0,0,270));
+				}
 			}
 		}
 			
@@ -42,10 +46,14 @@ public class Invader : MonoBehaviour {
 	void FixedUpdate ()
 	{
 		Vector3 moveDirection;
-		moveDirection = new Vector3(InvadersGameData.invadersDirection, 0, 0);
-		moveDirection = transform.TransformDirection(moveDirection);
-		moveDirection *= speed;
-		rigidbody.velocity = moveDirection * Time.deltaTime;
+		
+		if (!paused)
+		{
+			moveDirection = new Vector3(InvadersGameData.invadersDirection, 0, 0);
+			moveDirection = transform.TransformDirection(moveDirection);
+			moveDirection *= speed;
+			rigidbody.velocity = moveDirection * Time.deltaTime;
+		}
 	}
 	
 	// ID del invader
@@ -63,30 +71,36 @@ public class Invader : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) 
 	{
-		if (InvadersGameData.directionChanged == false && other.tag == "Wall")
+		if (!paused)
 		{
-        	InvadersGameData.invadersDirection *= -1.0f;
-			InvadersGameData.directionChanged = true;
-			InvadersGameData.descendInvaders();
-		}
-		else if (other.tag == "Laser")
-		{
-			InvadersGameData.notifyDecease(this.invaderID);
-			ExplodeAndDestroy();
-		} else if (other.tag == "Player")
-		{
-			playerActions pa = other.GetComponent<playerActions>();
-			pa.ExplodeAndDestroy();
-			ExplodeAndDestroy();
+			if (InvadersGameData.directionChanged == false && other.tag == "Wall")
+			{
+	        	InvadersGameData.invadersDirection *= -1.0f;
+				InvadersGameData.directionChanged = true;
+				InvadersGameData.descendInvaders();
+			}
+			else if (other.tag == "Laser")
+			{
+				InvadersGameData.notifyDecease(this.invaderID);
+				ExplodeAndDestroy();
+			} else if (other.tag == "Player")
+			{
+				playerActions pa = other.GetComponent<playerActions>();
+				pa.ExplodeAndDestroy();
+				ExplodeAndDestroy();
+			}
 		}
     }
 	
 	void OnTriggerExit(Collider other) 
 	{
-		if (other.tag == "Wall") 
+		if (!paused)
 		{
-			InvadersGameData.directionChanged = false;
-		} 
+			if (other.tag == "Wall") 
+			{
+				InvadersGameData.directionChanged = false;
+			} 
+		}
 	}
 	
 	public void descend(float distance)
@@ -102,5 +116,15 @@ public class Invader : MonoBehaviour {
 		Detonator d = detonation.GetComponent<Detonator>();
 		d.Explode();
 		Destroy(gameObject); // Destruye el invader
+	}
+	
+	public void OnPauseGame()
+	{
+		this.paused = true;
+	}
+	
+	public void OnResumeGame()
+	{
+		this.paused = false;
 	}
 }
