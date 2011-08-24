@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>9.0.21022</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{AD3E0071-432F-F80C-C7FE-310C20C08FA0}</ProjectGuid>
+	<ProjectGuid>{1F728319-6511-23F4-59EE-CB3E89E31C54}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-UnityScript-firstpass</AssemblyName>
+	<AssemblyName>Assembly-UnityScript-Editor-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,36 +44,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\PlatformInputController.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonCamera.js" />
-     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonController.js" />
-     <Compile Include="Assets\Standard Assets\Detonator\Sample Supporting Emitters\Detonator Spray Helper.js" />
-     <Compile Include="Assets\Standard Assets\Detonator\TestScene\DetonatorTest.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\AntialiasingAsPostEffect.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\BloomAndLensFlares.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\CameraInfo.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\ColorCorrectionCurves.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\ContrastEnhance.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Crease.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\DepthOfField34.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\EdgeDetectEffectNormals.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Fisheye.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\GlobalFog.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\PostEffectsBase.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\PostEffectsHelper.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Quads.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\SunShafts.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\TiltShift.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Triangles.js" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Vignetting.js" />
-     <Compile Include="Assets\Standard Assets\Particles\Legacy Particles\TimedObjectDestructor.js" />
-     <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\MouseOrbit.js" />
-     <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\SmoothFollow.js" />
-     <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\SmoothLookAt.js" />
-     <Compile Include="Assets\Standard Assets\Scripts\General Scripts\DragRigidbody.js" />
-     <Compile Include="Assets\Standard Assets\Scripts\Laser Scripts\OneShotParticles.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\AntialiasingAsPostEffectEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\BloomAndLensFlaresEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\ColorCorrectionCurvesEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\DepthOfField34Editor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\EdgeDetectEffectNormalsEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\SunShaftsEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\TiltShiftEditor.js" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />
@@ -128,6 +105,16 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SimpleClear.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\EdgeDetectX.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAAPreset2.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{E53CDB40-1DF9-8A61-5878-81243AFDF805}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{AD3E0071-432F-F80C-C7FE-310C20C08FA0}</Project>
+      <Name>Assembly-UnityScript-firstpass</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
