@@ -44,6 +44,7 @@ public class Nuke : MonoBehaviour {
 				AtomicDetonation.transform.position = other.transform.position;
 				Detonator d = AtomicDetonation.GetComponent<Detonator>();
 				d.Explode();
+				InvadersGameData.gameLost = true;
 				Destroy(other.gameObject); // Destruye al player
 				Destroy(gameObject); // Destruye el rocket
 			}

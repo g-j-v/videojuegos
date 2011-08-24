@@ -22,23 +22,31 @@ public class StartMenuGUI: MonoBehaviour {
 	
 	void OnGUI()
 	{
+		float titleWidth, loadingWidth;
+		float buttonWidth = 140;
+		
+		titleWidth = loadingWidth = 400;
+		
 		if (gSkin)
 		{
 			GUI.skin = gSkin;
 			backgroundStyle = new GUIStyle();
 			backgroundStyle.normal.background = backdrop;
-			GUI.Label (new Rect((Screen.width - (Screen.height * 2f)) * 0.75f, 0f, Screen.height * 2f, Screen.height), "", backgroundStyle);
-			GUI.Label (new Rect( (Screen.width/2), 50, 400, 100), "Space Invaders", "mainMenuTitle");
+			GUI.Label (new Rect(0f, 0f, Screen.width, Screen.height), "", backgroundStyle);
+			GUI.Label (new Rect( ((Screen.width-titleWidth)/2), 50, titleWidth, 100), "Space Invaders", "mainMenuTitle");
 			
-			if (GUI.Button( new Rect( (Screen.width/2), Screen.height/2, 140, 70), "Play"))
+			if (!isLoading)
 			{
-				isLoading = true;
-				Application.LoadLevel("invaders");
-			}
+				if (GUI.Button( new Rect( ((Screen.width-buttonWidth)/2), Screen.height/2, buttonWidth, 70), "Play"))
+				{
+					isLoading = true;
+					Application.LoadLevel("invaders");
+				}
 			
-			 if (isLoading) 
+			}	
+			else 
 			{
-				GUI.Label ( new Rect( (Screen.width/2), (Screen.height / 2), 400, 70), "Loading...", "mainMenuTitle"); 
+				GUI.Label ( new Rect( ((Screen.width-loadingWidth)/2), (Screen.height / 2), loadingWidth, 70), "Loading...", "mainMenuTitle"); 
 			}
 		}
 		else

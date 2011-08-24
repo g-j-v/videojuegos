@@ -59,6 +59,8 @@ public class playerActions : MonoBehaviour {
 			Detonation.transform.position = this.transform.position;
 			Detonator d = Detonation.GetComponent<Detonator>();
 			d.Explode();
+			Debug.Log("Perdiste Capo!");
+			InvadersGameData.gameLost = true;
 			Destroy(this.player); // Destruye al player porque pierde
 		}
 	}
