@@ -1,13 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\Scripts\GUI Scripts\StartMenuGUI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\Scripts\GUI Scripts\GameHUD.cs">
     <Files>
+      <File FileName="Assets\Standard Assets\Scripts\GUI Scripts\GameHUD.cs" Line="56" Column="1" />
       <File FileName="Assets\Standard Assets\Scripts\GUI Scripts\StartMenuGUI.cs" Line="35" Column="44" />
       <File FileName="Assets\Standard Assets\Scripts\Enemy Scripts\Rocket.cs" Line="26" Column="3" />
       <File FileName="Assets\Standard Assets\Scripts\Enemy Scripts\Invader.cs" Line="119" Column="15" />
       <File FileName="Assets\Standard Assets\Scripts\Player Scripts\playerActions.cs" Line="63" Column="37" />
       <File FileName="Assets\Standard Assets\Scripts\General Scripts\InvadersGameData.cs" Line="61" Column="6" />
-      <File FileName="Assets\Standard Assets\Scripts\GUI Scripts\GameHUD.cs" Line="60" Column="36" />
       <File FileName="Assets\Standard Assets\Scripts\Laser Scripts\LaserTrap.cs" Line="55" Column="6" />
       <File FileName="Assets\Standard Assets\Scripts\Enemy Scripts\Nuke.cs" Line="51" Column="4" />
     </Files>
