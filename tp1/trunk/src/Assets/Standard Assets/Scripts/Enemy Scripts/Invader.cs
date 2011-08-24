@@ -83,6 +83,8 @@ public class Invader : MonoBehaviour {
 			{
 				InvadersGameData.notifyDecease(this.invaderID);
 				ExplodeAndDestroy();
+				InvadersGameData.Score = InvadersGameData.Score + 1;
+				InvadersGameData.remainingInvaders = InvadersGameData.remainingInvaders - 1;
 			} else if (other.tag == "Player")
 			{
 				playerActions pa = other.GetComponent<playerActions>();

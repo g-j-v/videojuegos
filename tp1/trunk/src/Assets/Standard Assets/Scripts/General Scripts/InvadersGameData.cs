@@ -5,20 +5,23 @@ public class InvadersGameData : MonoBehaviour {
     private const int invaderRowQty = 16;
 	private const float descendDistance = 1.0f;
     private static bool[] armedInvaders;
+	private static float score;
 	public static float invadersDirection;
-	public static bool directionChanged;
+	public static bool directionChanged, gameLost;
+	public static int remainingInvaders;
 	public Invader invaderPrefab;
 	
 	// Use this for initialization
 	void Start () 
     {
 		invadersDirection = 1.0f;
-		directionChanged = false;
+		directionChanged = gameLost = false;
 		
 		// Instantiates prefabs in a 16x4 grid
 		int gridX = 16;
 		int gridY = 3;
-		invaderQty = gridX * gridY;
+		remainingInvaders = invaderQty = gridX * gridY;
+		
 		int i = 0;
 		float spacing = 3.5f;
 		Invader clone;
@@ -113,5 +116,20 @@ public class InvadersGameData : MonoBehaviour {
 		{
     		go.SendMessage ("OnResumeGame", SendMessageOptions.DontRequireReceiver);
 		}
+	}
+	
+	public static float Score
+	{
+		get
+		{
+			return score;
+		}
+		set
+		{
+			if (value > 0)
+			{
+				score = value;
+			}
+		}	
 	}
 }
