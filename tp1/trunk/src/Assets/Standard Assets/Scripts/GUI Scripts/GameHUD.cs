@@ -53,7 +53,6 @@ public class GameHUD: MonoBehaviour {
 				}
 			}
 			
-			Debug.Log(restartTime);
 			if (finishGame)
 			{
 				GUI.Label (new Rect( ((Screen.width-titleWidth)/2), 50, titleWidth, 100), finishLabel, "mainMenuTitle");
