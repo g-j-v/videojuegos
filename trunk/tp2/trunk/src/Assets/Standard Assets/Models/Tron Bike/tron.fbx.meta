@@ -1,0 +1,176 @@
+fileFormatVersion: 1
+guid: 328a0dee5eacd5f4ea63a64d58106955
+ModelImporter:
+  importerVersion: 7
+  meshes:
+    scaleFactor: 0.01
+    useFileUnits: 1
+    meshCompression: 0
+    generateColliders: 0
+    swapUVs: 0
+  tangentSpace:
+    normalImportMode: 0
+    tangentImportMode: 1
+    smoothingAngle: 60
+    splitTangents: 1
+  materials:
+    generation: 1
+  animations:
+    generation: 3
+    bakeAnimations: 0
+    animationCompression: 1
+    animationWrapMode: 0
+    splitAnimations: 1
+  nodeInfo:
+    //RootNode:
+    - 100000
+    - 400000
+    - 11100000
+    Camera:
+    - 100002
+    - 400002
+    Lamp:
+    - 100004
+    - 400004
+    rim1:
+    - 100006
+    - 400006
+    - 3300000
+    - 2300000
+    front_body:
+    - 100008
+    - 400008
+    - 3300002
+    - 2300002
+    tirefront:
+    - 100010
+    - 400010
+    - 3300004
+    - 2300004
+    rim2:
+    - 100012
+    - 400012
+    - 3300006
+    - 2300006
+    mainBody:
+    - 100014
+    - 400014
+    - 3300008
+    - 2300008
+    Plane_001:
+    - 100016
+    - 400016
+    - 3300010
+    - 2300010
+    CurveCircle_001:
+    - 100018
+    - 400018
+    - 3300012
+    - 2300012
+    tirecircle1:
+    - 100020
+    - 400020
+    - 3300014
+    - 2300014
+    tireback:
+    - 100022
+    - 400022
+    - 3300016
+    - 2300016
+    tirecircle1_001:
+    - 100024
+    - 400024
+    - 3300018
+    - 2300018
+    handle:
+    - 100026
+    - 400026
+    - 3300020
+    - 2300020
+    pedals:
+    - 100028
+    - 400028
+    - 3300022
+    - 2300022
+    Sphere:
+    - 100030
+    - 400030
+    - 3300024
+    - 2300024
+    Sphere_001:
+    - 100032
+    - 400032
+    - 3300026
+    - 2300026
+    secret:
+    - 100034
+    - 400034
+    - 3300028
+    - 2300028
+    secret_shield:
+    - 100036
+    - 400036
+    - 3300030
+    - 2300030
+    Circle:
+    - 100038
+    - 400038
+    - 3300032
+    - 2300032
+    rim2glow:
+    - 100040
+    - 400040
+    - 3300034
+    - 2300034
+    rim1glow:
+    - 100042
+    - 400042
+    - 3300036
+    - 2300036
+    stripe2:
+    - 100044
+    - 400044
+    - 3300038
+    - 2300038
+    stripe1:
+    - 100046
+    - 400046
+    - 3300040
+    - 2300040
+    front_lights:
+    - 100048
+    - 400048
+    - 3300042
+    - 2300042
+    1-jet:
+    - 100050
+    - 400050
+    - 3300044
+    - 2300044
+    1-jet_001:
+    - 100052
+    - 400052
+    - 3300046
+    - 2300046
+AssetImporter:
+  importerVersion: 1
+  fileIDToRecycleName:
+    4300000: 1-jet_001
+    4300002: 1-jet
+    4300004: front_lights
+    4300006: stripe1
+    4300008: stripe2
+    4300010: rim1glow
+    4300012: rim2glow
+    4300014: Circle
+    4300016: secret_shield
+    4300018: secret
+    4300024: pedals
+    4300026: handle
+    4300030: tireback
+    4300036: Plane_001
+    4300038: mainBody
+    4300040: rim2
+    4300042: tirefront
+    4300044: front_body
+    4300046: rim1
