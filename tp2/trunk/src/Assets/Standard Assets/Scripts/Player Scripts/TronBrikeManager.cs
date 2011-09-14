@@ -12,7 +12,7 @@ public class TronBrikeManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		speed = 50.0f;
+		speed = 300.0f;
 		rotation = 90f;
 		this.tronController = GetComponent<Rigidbody> ();
 		
