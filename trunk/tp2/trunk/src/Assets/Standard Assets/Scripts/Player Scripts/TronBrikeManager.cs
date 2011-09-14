@@ -2,51 +2,51 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class TronBrikeManager : MonoBehaviour {
+public class TronBrikeManager : MonoBehaviour
+{
 	private float speed, rotation;
 	private Rigidbody tronController;
-	private Vector3 moveDirection;
-	private bool movingHorizontal, movingVertical;
-	
+	private Vector3 moveDirection, rotateDirection;
+
+
 	// Use this for initialization
-	void Start () {
-		speed = 50.0F;
+	void Start ()
+	{
+		speed = 50.0f;
 		rotation = 90f;
-		this.tronController = GetComponent<Rigidbody>();
-		movingVertical = false;
-		movingHorizontal = true;
+		this.tronController = GetComponent<Rigidbody> ();
+		
 		moveDirection = Vector3.zero;
+		rotateDirection = Vector3.zero;
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
-	
-	}
-	
-	void FixedUpdate() {
+//	void Update ()
+	//{
+
+	//}
+
+	void Update ()
+	{
 		// Defines 90 degree turn
-		float clampHorizontalAxis, clampVerticalAxis;
-		float horizontalAxis, verticalAxis;
-		Vector3 oldDirection = moveDirection;
+		float clampHorizontalAxis;
+		float horizontalAxis;
+		Vector3 oldDirection = transform.rotation.eulerAngles;
 		
-		horizontalAxis = Input.GetAxis("Horizontal");
-		verticalAxis = Input.GetAxis("Vertical");
-		clampHorizontalAxis = horizontalAxis / Mathf.Abs(horizontalAxis);
-		clampVerticalAxis = verticalAxis / Mathf.Abs(verticalAxis);
+		horizontalAxis = Input.GetAxis ("Horizontal");
 		
-		if (horizontalAxis != 0 && verticalAxis != 0) {
-			/* do nothing, continue moving */
-		} else if ((Input.GetKeyDown("a") || Input.GetKeyDown("d")) && horizontalAxis != 0) {
-			moveDirection = new Vector3(clampHorizontalAxis, 0, 0);
-			Debug.Log("horizontal old: " + oldDirection + " new: " + moveDirection);
-			transform.rotation = Quaternion.FromToRotation(oldDirection,moveDirection);
-		} else if ((Input.GetKeyDown("w") || Input.GetKeyDown("s")) && verticalAxis != 0){
-			moveDirection = new Vector3(0, 0, clampVerticalAxis);
-			Debug.Log("vertical old: " + oldDirection + " new: " + moveDirection);
-			transform.rotation = Quaternion.FromToRotation(oldDirection,moveDirection);
-		} else { /* do nothing, continue moving*/}
-				
+		
+		clampHorizontalAxis = horizontalAxis / Mathf.Abs (horizontalAxis);
+		
+		if ((Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.D)) && horizontalAxis != 0) {
+			rotateDirection = new Vector3 (0, clampHorizontalAxis, 0);
+			
+			this.tronController.transform.Rotate (rotateDirection * rotation);
+			Debug.Log (transform == this.tronController.transform);
+		}
+		
 		//print(moveDirection);
-		this.tronController.velocity = moveDirection * speed * Time.deltaTime;
+		this.tronController.velocity = transform.forward * speed * Time.deltaTime;
+		
 	}
 }
