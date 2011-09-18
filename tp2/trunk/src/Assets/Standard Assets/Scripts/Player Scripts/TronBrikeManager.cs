@@ -4,19 +4,21 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class TronBrikeManager : MonoBehaviour
 {
-	private float speed, rotation;
+	private float speed;
 	private Rigidbody tronController;
-	private Vector3 moveDirection, rotateDirection;
+	private Vector3 rotateDirection;
+	private static Vector3 leftTurn, rightTurn;
+	public GameObject TronTrail, TronTrailCollider;
 
 
 	// Use this for initialization
 	void Start ()
 	{
 		speed = 300.0f;
-		rotation = 90f;
+		leftTurn = new Vector3(0, -90f, 0);
+		rightTurn = new Vector3(0, 90f, 0);
 		this.tronController = GetComponent<Rigidbody> ();
 		
-		moveDirection = Vector3.zero;
 		rotateDirection = Vector3.zero;
 	}
 
@@ -31,22 +33,30 @@ public class TronBrikeManager : MonoBehaviour
 		// Defines 90 degree turn
 		float clampHorizontalAxis;
 		float horizontalAxis;
-		Vector3 oldDirection = transform.rotation.eulerAngles;
 		
 		horizontalAxis = Input.GetAxis ("Horizontal");
 		
 		
 		clampHorizontalAxis = horizontalAxis / Mathf.Abs (horizontalAxis);
 		
-		if ((Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.D)) && horizontalAxis != 0) {
-			rotateDirection = new Vector3 (0, clampHorizontalAxis, 0);
+		if ((Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.D))) {
+			if (clampHorizontalAxis < 0) {
+				rotateDirection = leftTurn;
+			} else {
+				rotateDirection = rightTurn;
+			}
 			
-			this.tronController.transform.Rotate (rotateDirection * rotation);
-			Debug.Log (transform == this.tronController.transform);
+			Debug.Log(rotateDirection);
+			this.tronController.transform.Rotate (rotateDirection, Space.Self);
 		}
 		
 		//print(moveDirection);
 		this.tronController.velocity = transform.forward * speed * Time.deltaTime;
-		
+		TronTrail.transform.position = transform.position;
+		TronTrailCollider.transform.position = transform.position;
+	}
+	
+	void OnParticleCollision(GameObject other) {
+    	Debug.Log("Hit!");
 	}
 }
