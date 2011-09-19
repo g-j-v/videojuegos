@@ -9,6 +9,7 @@ public class TronBrikeManager : MonoBehaviour
 	private Vector3 rotateDirection;
 	private static Vector3 leftTurn, rightTurn;
 	public GameObject TronTrail, TronTrailCollider;
+	private GameObject bike;
 
 
 	// Use this for initialization
@@ -18,6 +19,7 @@ public class TronBrikeManager : MonoBehaviour
 		leftTurn = new Vector3(0, -90f, 0);
 		rightTurn = new Vector3(0, 90f, 0);
 		this.tronController = GetComponent<Rigidbody> ();
+		this.bike = gameObject;
 		
 		rotateDirection = Vector3.zero;
 	}
@@ -33,13 +35,23 @@ public class TronBrikeManager : MonoBehaviour
 		// Defines 90 degree turn
 		float clampHorizontalAxis;
 		float horizontalAxis;
+		KeyCode left, right;
 		
-		horizontalAxis = Input.GetAxis ("Horizontal");
+		if (bike.name == "TronBike2") {
+			horizontalAxis = Input.GetAxis ("HorizontalPlayer2");
+			left = KeyCode.LeftArrow;
+			right = KeyCode.RightArrow;
+		} else {
+			horizontalAxis = Input.GetAxis ("Horizontal");
+			left = KeyCode.A;
+			right = KeyCode.D;
+		}
 		
 		
 		clampHorizontalAxis = horizontalAxis / Mathf.Abs (horizontalAxis);
 		
-		if ((Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.D))) {
+		
+		if ((Input.GetKeyDown (left) || Input.GetKeyDown (right))) {
 			if (clampHorizontalAxis < 0) {
 				rotateDirection = leftTurn;
 			} else {
@@ -57,6 +69,20 @@ public class TronBrikeManager : MonoBehaviour
 	}
 	
 	void OnParticleCollision(GameObject other) {
-    	Debug.Log("Hit!");
+		
+    	if (bike.name == "TronBike2" && other.name == "TrailCollider") {
+			Destroy(TronTrail);
+			Destroy(TronTrailCollider);
+			Destroy(gameObject);
+			return;
+		}
+		
+		if (bike.name == "TronBike" && other.name == "TrailCollider2") {
+			Destroy(TronTrail);
+			Destroy(TronTrailCollider);
+			Destroy(gameObject);
+			return;
+		}
+		
 	}
 }
