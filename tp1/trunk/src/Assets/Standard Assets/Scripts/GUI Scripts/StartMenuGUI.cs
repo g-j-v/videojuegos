@@ -33,14 +33,16 @@ public class StartMenuGUI: MonoBehaviour {
 			backgroundStyle = new GUIStyle();
 			backgroundStyle.normal.background = backdrop;
 			GUI.Label (new Rect(0f, 0f, Screen.width, Screen.height), "", backgroundStyle);
-			GUI.Label (new Rect( ((Screen.width-titleWidth)/2), 50, titleWidth, 100), "Space Invaders", "mainMenuTitle");
+			GUI.Label (new Rect( ((Screen.width-titleWidth)/2), 70, titleWidth, 100), "TRON", "mainMenuTitle");
 			
+			GUI.Label (new Rect(0, Screen.height/2, 250, 100), " Player 1: A D \n Player 2: <- -> \n\n Pause: P, esc", "textfield");
+
 			if (!isLoading)
 			{
 				if (GUI.Button( new Rect( ((Screen.width-buttonWidth)/2), Screen.height/2, buttonWidth, 70), "Play"))
 				{
 					isLoading = true;
-					Application.LoadLevel("invaders");
+					Application.LoadLevel("tronScene");
 				}
 			
 			}	
