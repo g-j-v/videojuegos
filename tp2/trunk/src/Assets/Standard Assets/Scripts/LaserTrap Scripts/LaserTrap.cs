@@ -10,7 +10,7 @@ public class LaserTrap : MonoBehaviour {
 	public GameObject hitEffect;
 	protected bool paused;
 	
-	private float lastHitTime = 0.0f;
+	//private float lastHitTime = 0.0f;
 	private const float laserSpeed = 1200f;
 
 	public void Start ()
@@ -32,14 +32,11 @@ public class LaserTrap : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) 
 	{
-		Vector3 pos;
-		Debug.Log("Crashed: " + other.name);
-		//pos = GetComponent<Transform>().position;
-		//pos.y += laserWidth/2;
 		Instantiate(hitEffect, other.transform.position, Quaternion.identity);
 
-		if (other.tag == "Enemy")
+		if (other.tag == "TronBike")
 		{
+			Debug.Log("Crashed: " + other.name);
 			
 		} else if (other.tag == "WallDestroyer")
 		{

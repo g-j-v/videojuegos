@@ -8,7 +8,7 @@ public class TronBrikeManager : MonoBehaviour
 	private Rigidbody tronController;
 	private Vector3 rotateDirection;
 	private static Vector3 leftTurn, rightTurn;
-	public GameObject TronTrail, TronTrailCollider;
+	public GameObject TronTrail, TronTrailCollider, Detonation;
 	private GameObject bike;
 
 
@@ -37,53 +37,83 @@ public class TronBrikeManager : MonoBehaviour
 		float horizontalAxis;
 		KeyCode left, right;
 		
-		if (bike.name == "TronBike2") {
-			horizontalAxis = Input.GetAxis ("HorizontalPlayer2");
-			left = KeyCode.LeftArrow;
-			right = KeyCode.RightArrow;
-		} else {
-			horizontalAxis = Input.GetAxis ("Horizontal");
-			left = KeyCode.A;
-			right = KeyCode.D;
-		}
-		
-		
-		clampHorizontalAxis = horizontalAxis / Mathf.Abs (horizontalAxis);
-		
-		
-		if ((Input.GetKeyDown (left) || Input.GetKeyDown (right))) {
-			if (clampHorizontalAxis < 0) {
-				rotateDirection = leftTurn;
+		if (!TronGameManager.finishGame) {
+			if (bike.name == "TronBike2") {
+				horizontalAxis = Input.GetAxis ("HorizontalPlayer2");
+				left = KeyCode.LeftArrow;
+				right = KeyCode.RightArrow;
 			} else {
-				rotateDirection = rightTurn;
+				horizontalAxis = Input.GetAxis ("Horizontal");
+				left = KeyCode.A;
+				right = KeyCode.D;
 			}
 			
-			Debug.Log(rotateDirection);
-			this.tronController.transform.Rotate (rotateDirection, Space.Self);
-			this.tronController.MovePosition(this.tronController.transform.position + this.tronController.transform.forward*1.1f);
+			
+			clampHorizontalAxis = horizontalAxis / Mathf.Abs (horizontalAxis);
+			
+			
+			if ((Input.GetKeyDown (left) || Input.GetKeyDown (right))) {
+				if (clampHorizontalAxis < 0) {
+					rotateDirection = leftTurn;
+				} else {
+					rotateDirection = rightTurn;
+				}
+				
+				Debug.Log(rotateDirection);
+				this.tronController.transform.Rotate (rotateDirection, Space.Self);
+				this.tronController.MovePosition(this.tronController.transform.position + this.tronController.transform.forward*1.1f);
+			}
+			
+			//print(moveDirection);
+			this.tronController.velocity = transform.forward * speed * Time.deltaTime;
+			TronTrail.transform.position = transform.position;
+			TronTrailCollider.transform.position = transform.position;
+		} else {
+			this.tronController.velocity = Vector3.zero;
 		}
-		
-		//print(moveDirection);
-		this.tronController.velocity = transform.forward * speed * Time.deltaTime;
-		TronTrail.transform.position = transform.position;
-		TronTrailCollider.transform.position = transform.position;
 	}
 	
 	void OnParticleCollision(GameObject other) {
 		
     	if (bike.name == "TronBike2" && other.name == "TrailCollider") {
-			Destroy(TronTrail);
-			Destroy(TronTrailCollider);
-			Destroy(gameObject);
+			TronGameManager.playerOneWon();
+			ExplodeAndDestroy();
 			return;
 		}
 		
 		if (bike.name == "TronBike" && other.name == "TrailCollider2") {
-			Destroy(TronTrail);
-			Destroy(TronTrailCollider);
-			Destroy(gameObject);
+			TronGameManager.playerTwoWon();
+			ExplodeAndDestroy();
 			return;
 		}
 		
 	}
+	
+	void OnTriggerEnter(Collider other) {
+		if (other.GetComponent<LaserTrap>()) {
+			if (bike.name == "TronBike") {
+				TronGameManager.playerTwoWon();
+			} else {
+				TronGameManager.playerOneWon();
+			}
+			ExplodeAndDestroy();
+		} else {
+			if (other.name == "TronBike" || other.name == "TronBike2") {
+				ExplodeAndDestroy();
+				TronGameManager.evenGame();
+			}
+		}
+	}
+	
+	public void ExplodeAndDestroy()
+	{	
+		Detonation.transform.position = this.transform.position;
+		Detonator d = Detonation.GetComponent<Detonator>();
+		d.Explode();
+		Debug.Log("Player: " + bike.name + " lost!");
+		Destroy(TronTrail);
+		Destroy(TronTrailCollider);
+		Destroy(this.bike); // Destruye al player porque pierde
+	}
+
 }
