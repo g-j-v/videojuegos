@@ -60,6 +60,7 @@ public class TronBrikeManager : MonoBehaviour
 			
 			Debug.Log(rotateDirection);
 			this.tronController.transform.Rotate (rotateDirection, Space.Self);
+			this.tronController.MovePosition(this.tronController.transform.position + this.tronController.transform.forward*1.1f);
 		}
 		
 		//print(moveDirection);
