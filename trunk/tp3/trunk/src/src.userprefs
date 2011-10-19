@@ -1,0 +1,13 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets (Mobile)\Scripts\Generator\Editor\RoadCreatorInspector.cs">
+    <Files>
+      <File FileName="Assets\Standard Assets (Mobile)\Scripts\PlayerMover.cs" Line="28" Column="3" />
+      <File FileName="Assets\Standard Assets (Mobile)\Scripts\Generator\Editor\RoadCreatorInspector.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
