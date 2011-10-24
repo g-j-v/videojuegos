@@ -63,9 +63,11 @@ public class RoadCreator : MonoBehaviour
 		// No permitir dos giros consecutivos
 		if (prevIdx == 1 || prevIdx == 2)
 		{
+			prevIdx = 0;
 			return 0;
 		}
 		
-		return UnityEngine.Random.Range(0, roadChunks.Length);
+		prevIdx = UnityEngine.Random.Range(0, roadChunks.Length);
+		return prevIdx;
 	}
 }
