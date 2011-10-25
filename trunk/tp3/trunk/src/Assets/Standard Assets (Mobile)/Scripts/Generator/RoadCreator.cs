@@ -31,16 +31,29 @@ public class RoadCreator : MonoBehaviour
 		
 		for (int i=0; i<roadSize; i++)
 		{
-			int roadChunkIdx = getRandomChunkIndex();
 			
-			GameObject newGO = UnityEngine.Object.Instantiate(roadChunks[roadChunkIdx]) as GameObject;
-			newGO.name = String.Format("part-{0}", i);
-			newGO.transform.parent = transform;
+				int roadChunkIdx = getRandomChunkIndex();
+				
+				GameObject newGO = UnityEngine.Object.Instantiate(roadChunks[roadChunkIdx]) as GameObject;
+				newGO.name = String.Format("part-{0}", i);
+				newGO.transform.parent = transform;
+				
+				newGO.transform.localPosition = mountTransform.TransformPoint(newGO.transform.localPosition);
+				newGO.transform.Rotate(new Vector3(0, rotY, 0));
+				
+				mountTransform = newGO.GetComponent<RoadChunk>().mountPoint;
+				
+				RaycastHit hit;
+				Vector3 rayIni = mountTransform.position + new Vector3(mountTransform.position.x,100, mountTransform.position.z);
+				
+				if (Physics.Raycast(rayIni , -Vector3.up, out hit))
+				{
+	    	    	Debug.Log(hit.collider.gameObject.name);
+				}
 			
-			newGO.transform.localPosition = mountTransform.TransformPoint(newGO.transform.localPosition);
-			newGO.transform.Rotate(new Vector3(0, rotY, 0));
 			
-			mountTransform = newGO.GetComponent<RoadChunk>().mountPoint;
+			
+			
 			
 			rotY += mountTransform.localRotation.eulerAngles.y;
 		}
