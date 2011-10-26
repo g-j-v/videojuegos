@@ -31,7 +31,9 @@ public class RoadCreator : MonoBehaviour
 		
 		for (int i=0; i<roadSize; i++)
 		{
+			bool isOk = false;
 			
+		//	while(isOk){
 				int roadChunkIdx = getRandomChunkIndex();
 				
 				GameObject newGO = UnityEngine.Object.Instantiate(roadChunks[roadChunkIdx]) as GameObject;
@@ -46,14 +48,8 @@ public class RoadCreator : MonoBehaviour
 				RaycastHit hit;
 				Vector3 rayIni = mountTransform.position + new Vector3(mountTransform.position.x,100, mountTransform.position.z);
 				
-				if (Physics.Raycast(rayIni , -Vector3.up, out hit))
-				{
-	    	    	Debug.Log(hit.collider.gameObject.name);
-				}
-			
-			
-			
-			
+		 		isOk = Physics.Raycast(rayIni , -Vector3.up, out hit) && !String.Equals(hit.collider.gameObject.name, "Plane");
+		//	}	
 			
 			rotY += mountTransform.localRotation.eulerAngles.y;
 		}
