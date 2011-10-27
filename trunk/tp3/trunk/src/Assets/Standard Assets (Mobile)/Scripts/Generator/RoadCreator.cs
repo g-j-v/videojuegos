@@ -36,27 +36,24 @@ public class RoadCreator : MonoBehaviour
 			GameObject newGO = UnityEngine.Object.Instantiate (roadChunks[roadChunkIdx]) as GameObject;
 			newGO.name = String.Format ("part-{0}", i);
 			newGO.transform.parent = transform;
+			
+			newGO.transform.localPosition = mountTransform.TransformPoint (newGO.transform.localPosition);
 			newGO.transform.Rotate (new Vector3 (0, rotY, 0));
 			
-			Transform tmpMountTransform = newGO.GetComponent<RoadChunk> ().mountPoint;
-			Transform tmpCenterTransform = newGO.GetComponent<RoadChunk>().transform;
-			Vector3 rayIni1 = mountTransform.position + new Vector3 (tmpMountTransform.position.x, 100, tmpMountTransform.position.z);
-			Vector3 rayIni2 = mountTransform.position + new Vector3 (tmpCenterTransform.position.x, 100, tmpCenterTransform.position.z);
+			Vector3 rayIni1 = newGO.transform.position + new Vector3(newGO.GetComponent<RoadChunk>().road.position.x, 0 , newGO.GetComponent<RoadChunk>().road.position.z);
+			Vector3 rayIni2 = newGO.GetComponent<RoadChunk>().mountPoint.position;
 			RaycastHit hit1;
 			RaycastHit hit2;
 			
-			bool condition1 = Physics.Raycast (rayIni1, -Vector3.up, out hit1) && String.Equals (hit1.collider.gameObject.name, "Plane");
-			bool condition2 = Physics.Raycast (rayIni2, -Vector3.up, out hit2) && (String.Equals (hit2.collider.gameObject.name, "Plane") || String.Equals (hit2.collider.gameObject.name, newGO.name));
+			bool condition1 = Physics.Raycast (rayIni1, -Vector3.up, out hit1) && (String.Equals (hit1.collider.gameObject.name, "Plane"));// || Equals(hit1.collider.gameObject, newGO.transform));
+			bool condition2 = Physics.Raycast (rayIni2, -Vector3.up, out hit2) && (String.Equals (hit2.collider.gameObject.name, "Plane"));// || String.Equals (hit2.collider.gameObject.name, newGO.transform.name));
 			
 			Debug.Log(condition1 + "  " + condition2);
-			Debug.Log(hit1.collider.gameObject.name + "   " + hit2.collider.gameObject.name);
+			Debug.Log(hit1.collider.gameObject.name + "   " + hit2.collider.gameObject.name + "    " + newGO.transform.name);
 			Debug.Log(rayIni1 + "   " + rayIni2 );
 			
 			if (condition1 && condition2) {
-				
-				newGO.transform.localPosition = mountTransform.TransformPoint (newGO.transform.localPosition);
-				
-				mountTransform = tmpMountTransform;
+				mountTransform = newGO.GetComponent<RoadChunk>().mountPoint;
 				rotY += mountTransform.localRotation.eulerAngles.y;
 			} else {
 				DestroyImmediate(newGO);
