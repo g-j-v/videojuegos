@@ -15,6 +15,7 @@ public class RoadCreator : MonoBehaviour
 	/// Size of the road in number of chunks
 	/// </summary>
 	public int roadSize = 10;
+	private int prevIdx = 0;
 
 	private Transform mountTransform;
 
@@ -24,7 +25,7 @@ public class RoadCreator : MonoBehaviour
 	public void Generate ()
 	{
 		mountTransform = gameObject.transform;
-		mountTransform.position = new Vector3 (0, 0.1f, 0);
+		//mountTransform.position = new Vector3 (0, 0.1f, 0);
 		
 		
 		float rotY = 0.0f;
@@ -66,7 +67,7 @@ public class RoadCreator : MonoBehaviour
 			//Debug.Log(rayIni1 + "   " + rayIni2 );
 			
 			if (condition1 && condition2) {
-				//newGO.transform.localPosition = mountTransform.TransformPoint (newGO.transform.localPosition);
+				prevIdx = roadChunkIdx;
 				mountTransform = newGO.GetComponent<RoadChunk>().mountPoint;
 				rotY += mountTransform.localRotation.eulerAngles.y;
 			} else {
@@ -86,16 +87,13 @@ public class RoadCreator : MonoBehaviour
 		}
 	}
 
-	private int prevIdx = 0;
 	private int getRandomChunkIndex ()
 	{
 		// No permitir dos giros consecutivos
 		if (prevIdx == 1 || prevIdx == 2) {
-			prevIdx = 0;
 			return 0;
 		}
-		
-		prevIdx = UnityEngine.Random.Range (0, roadChunks.Length);
-		return prevIdx;
+			
+		return UnityEngine.Random.Range (0, roadChunks.Length);
 	}
 }
