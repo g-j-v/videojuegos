@@ -40,17 +40,28 @@ public class RoadCreator : MonoBehaviour
 			newGO.transform.localPosition = mountTransform.TransformPoint (newGO.transform.localPosition);
 			newGO.transform.Rotate (new Vector3 (0, rotY, 0));
 			
-			Vector3 rayIni1 = newGO.transform.position + new Vector3(newGO.GetComponent<RoadChunk>().road.position.x, 0 , newGO.GetComponent<RoadChunk>().road.position.z);
+			Vector3 initialPosition = newGO.GetComponent<BoxCollider>().transform.position;
 			Vector3 rayIni2 = newGO.GetComponent<RoadChunk>().mountPoint.position;
+			Vector3 rayIni1 = initialPosition + (rayIni2-initialPosition)/2;
+			
+			/*GameObject collision1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			collision1.transform.position = rayIni1;
+			collision1.name = "coll1-"+ i;
+			
+			GameObject collision2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			collision2.transform.position = rayIni2;
+			collision2.name = "coll2-"+ i;*/
+			
+			
 			RaycastHit hit1;
 			RaycastHit hit2;
 			
 			bool condition1 = Physics.Raycast (rayIni1, -Vector3.up, out hit1) && (String.Equals (hit1.collider.gameObject.name, "Plane"));// || Equals(hit1.collider.gameObject, newGO.transform));
 			bool condition2 = Physics.Raycast (rayIni2, -Vector3.up, out hit2) && (String.Equals (hit2.collider.gameObject.name, "Plane"));// || String.Equals (hit2.collider.gameObject.name, newGO.transform.name));
 			
-			Debug.Log(condition1 + "  " + condition2);
+			//Debug.Log(condition1 + "  " + condition2);
 			Debug.Log(hit1.collider.gameObject.name + "   " + hit2.collider.gameObject.name + "    " + newGO.transform.name);
-			Debug.Log(rayIni1 + "   " + rayIni2 );
+			//Debug.Log(rayIni1 + "   " + rayIni2 );
 			
 			if (condition1 && condition2) {
 				mountTransform = newGO.GetComponent<RoadChunk>().mountPoint;
