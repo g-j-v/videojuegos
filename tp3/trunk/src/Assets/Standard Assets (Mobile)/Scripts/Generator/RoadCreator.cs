@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -16,7 +16,6 @@ public class RoadCreator : MonoBehaviour
 	/// </summary>
 	public int roadSize = 10;
 	
-	private int prevIdx = 0;
 	private Transform mountTransform;
 	private Vector3[] rays;
 	private RaycastHit[] hits;
@@ -30,93 +29,59 @@ public class RoadCreator : MonoBehaviour
 	/// </summary>
 	public void Generate ()
 	{
-		mountTransform = gameObject.transform;
-		Transform newChunkTrans, newChunkMount;
-		BoxCollider newChunkCollider;
 		
 		// Initialization
 		rays = new Vector3[6];
 		hits = new RaycastHit[6];
 		
-		float rotY = 0.0f;
-		bool overlap = false;
+		putChunks(gameObject.transform, 0.0f, 0, -1);
+	}
+	
+	private bool putChunks(Transform mountTransform, float rotY, int iter, int previdx) {
+		GameObject currChunk;
+		Transform mountPoint;
+		bool success, overlap;
+		int roadChunkIdx, attemps;
+		Dictionary<int, bool> chunksTested;
 		
-		for (int i = 0; i < roadSize; i++) {
-
-			int roadChunkIdx = getRandomChunkIndex ();
+		// End Condition
+		if (iter >= roadSize) {
+			return true;
+		}
 			
-			GameObject newGO = UnityEngine.Object.Instantiate (roadChunks[roadChunkIdx]) as GameObject;
-			
-			// put chunk to IgnoreRayCast layer temporarily for overlap checking
-			newGO.layer = 2; 
-			
-			newGO.name = String.Format ("part-{0}", i);
-			newGO.transform.parent = transform;
-			
-			// positions chunk
-			newGO.transform.localPosition = mountTransform.TransformPoint (newGO.transform.localPosition);
-			newGO.transform.Rotate (new Vector3 (0, rotY, 0));
-			
-			newChunkTrans = newGO.GetComponent<BoxCollider>().transform;
-			newChunkCollider = newGO.GetComponent<BoxCollider>();
-			newChunkMount = newGO.GetComponent<RoadChunk>().mountPoint;
-			
-			Vector3 initialPosition = new Vector3(newChunkTrans.position.x, 3, newChunkTrans.position.z);
-			
-			// chunk mountpoint
-			rays[0] = new Vector3(newChunkMount.position.x, 3, newChunkMount.position.z);
-			
-			// chunk center
-			rays[1] = initialPosition + (rays[0]-initialPosition)/2;
-			
-			// Corners of chunk box collider
-			rays[2] = newChunkTrans.TransformPoint(new Vector3(1.5f,2,-0.25f));
-			rays[3] = newChunkTrans.TransformPoint(new Vector3(-1.5f,2,-0.25f));
-			rays[4] = newChunkTrans.TransformPoint(new Vector3(-1.5f,2,-1*newChunkCollider.size.z));
-			rays[5] = newChunkTrans.TransformPoint(new Vector3(1.5f,2,-1*newChunkCollider.size.z));
-			
-			/*
-			GameObject collision1 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-			collision1.transform.position = rayIni1;
-			collision1.name = "coll1-"+ i;
-			*/
-			/*
-			GameObject collision2 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-			collision2.transform.position = corner2;
-			collision2.name = "coll2-"+ i;
-			*/
-			/*
-			GameObject collision3 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-			collision3.transform.position = corner3;
-			collision3.name = "coll3-"+ i;
-			*/
-			/*
-			GameObject collision4 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-			collision4.transform.position = corner4;
-			collision4.name = "coll4-"+ i;
-			*/
-			
-			
-			for (int j = 0 ; j < rays.GetLength(0) ; j++) {
-				if (!(Physics.Raycast (rays[j], -Vector3.up, out hits[j]) && (String.Equals (hits[j].collider.gameObject.name, "Plane") || String.Equals(hits[j].collider.gameObject.name, newGO.transform.name)))) {
-					overlap = true;
+		success = overlap = false;
+		attemps = 0;
+		
+		chunksTested = new Dictionary<int, bool>();
+		
+		for (int i = 0 ; i < roadChunks.Length ; i++) {
+			chunksTested.Add(i,false);
+		}	
+		
+		while(attemps < roadChunks.Length && !success){
+			roadChunkIdx = getRandomChunkIndex (chunksTested, previdx);
+			currChunk = UnityEngine.Object.Instantiate (roadChunks[roadChunkIdx]) as GameObject;	
+			currChunk.name = String.Format ("part-{0}", iter);
+			currChunk.transform.parent = transform;
+			mountPoint = currChunk.GetComponent<RoadChunk>().mountPoint;
+			overlap = putChunk(mountTransform, rotY, currChunk);
+			attemps++;
+				
+			if (overlap) {
+				DestroyImmediate(currChunk);
+			} else {
+				success = putChunks(mountPoint, rotY + mountPoint.localRotation.eulerAngles.y, iter+1, 
+									roadChunkIdx);
+					
+				if (!success) {
+					DestroyImmediate(currChunk);	
 				}
 			}
-			
-			if (!overlap) {
-				prevIdx = roadChunkIdx;
-				mountTransform = newGO.GetComponent<RoadChunk>().mountPoint;
-				rotY += mountTransform.localRotation.eulerAngles.y;
-				newGO.layer = 0; // restore default layer to chunk
-			} else {
-				DestroyImmediate(newGO);
-			}
-			
-			// reset overlap test
-			overlap = false;
 		}
+		
+		return success;
 	}
-
+	
 	public void RemoveAll ()
 	{
 		RoadChunk[] rc = gameObject.GetComponentsInChildren<RoadChunk> ();
@@ -125,14 +90,66 @@ public class RoadCreator : MonoBehaviour
 			UnityEngine.Object.DestroyImmediate (rc[i].gameObject);
 		}
 	}
-
-	private int getRandomChunkIndex ()
+	
+	private bool putChunk(Transform mountTransform, float rotY, GameObject chunk) {
+		Transform newChunkTrans, newChunkMount;
+		BoxCollider newChunkCollider;	
+		
+		bool overlap = false;
+		chunk.layer = 2;
+		
+		// positions chunk
+		chunk.transform.localPosition = mountTransform.TransformPoint (chunk.transform.localPosition);
+		chunk.transform.Rotate (new Vector3 (0, rotY, 0));
+		
+		newChunkTrans = chunk.GetComponent<BoxCollider>().transform;
+		newChunkCollider = chunk.GetComponent<BoxCollider>();
+		newChunkMount = chunk.GetComponent<RoadChunk>().mountPoint;
+		
+		Vector3 initialPosition = new Vector3(newChunkTrans.position.x, 3, newChunkTrans.position.z);
+		
+		// chunk mountpoint
+		rays[0] = new Vector3(newChunkMount.position.x, 3, newChunkMount.position.z);
+		
+		// chunk center
+		rays[1] = initialPosition + (rays[0]-initialPosition)/2;
+		
+		// Corners of chunk box collider
+		rays[2] = newChunkTrans.TransformPoint(new Vector3(1.5f,2,-0.25f));
+		rays[3] = newChunkTrans.TransformPoint(new Vector3(-1.5f,2,-0.25f));
+		rays[4] = newChunkTrans.TransformPoint(new Vector3(-1.5f,2,-1*newChunkCollider.size.z));
+		rays[5] = newChunkTrans.TransformPoint(new Vector3(1.5f,2,-1*newChunkCollider.size.z));
+					
+		for (int j = 0 ; j < rays.GetLength(0) ; j++) {
+			if (!(Physics.Raycast (rays[j], -Vector3.up, out hits[j]) && (String.Equals (hits[j].collider.gameObject.name, "Plane") || String.Equals(hits[j].collider.gameObject.name, chunk.transform.name)))) {
+				overlap = true;
+			}
+		}
+		
+		chunk.layer = 0;
+		return overlap;
+	}
+	
+	private int getRandomChunkIndex (Dictionary<int, bool> chunksTested, int previdx)
 	{
+		int idx = 0;
+		bool prevSelected = true;
+		
 		// No permitir dos giros consecutivos
-		if (prevIdx == 1 || prevIdx == 2) {
+		if (previdx == 1 || previdx == 2) {
+			chunksTested[0] = true;
 			return 0;
 		}
+		
+		while(prevSelected) {
+			idx = UnityEngine.Random.Range (0, roadChunks.Length);
+			chunksTested.TryGetValue(idx, out prevSelected);
 			
-		return UnityEngine.Random.Range (0, roadChunks.Length);
+			if (!prevSelected) {
+				chunksTested[idx] = true;
+			}
+		}
+			    
+		return idx;
 	}
 }
