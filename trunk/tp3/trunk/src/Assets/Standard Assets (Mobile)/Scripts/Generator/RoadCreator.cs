@@ -10,11 +10,13 @@ public class RoadCreator : MonoBehaviour
 	/// Chunks of the road
 	/// </summary>
 	public GameObject[] roadChunks;
-
+	public GameObject FinishLine;
+		
 	/// <summary>
 	/// Size of the road in number of chunks
 	/// </summary>
 	public int roadSize = 10;
+	
 	
 	private Transform mountTransform;
 	private Vector3[] rays;
@@ -29,12 +31,17 @@ public class RoadCreator : MonoBehaviour
 	/// </summary>
 	public void Generate ()
 	{
+		Transform firstChunk;
+		GameObject fline;
 		
 		// Initialization
 		rays = new Vector3[6];
 		hits = new RaycastHit[6];
 		
 		putChunks(gameObject.transform, 0.0f, 0, -1);
+		firstChunk = transform.Find("part-0");
+		fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
+		fline.transform.position = firstChunk.Find("mountPoint").position;
 	}
 	
 	private bool putChunks(Transform mountTransform, float rotY, int iter, int previdx) {
@@ -100,6 +107,7 @@ public class RoadCreator : MonoBehaviour
 		
 		// positions chunk
 		chunk.transform.localPosition = mountTransform.TransformPoint (chunk.transform.localPosition);
+		chunk.transform.position = new Vector3(chunk.transform.position.x, 0, chunk.transform.position.z);
 		chunk.transform.Rotate (new Vector3 (0, rotY, 0));
 		
 		newChunkTrans = chunk.GetComponent<BoxCollider>().transform;
@@ -115,10 +123,10 @@ public class RoadCreator : MonoBehaviour
 		rays[1] = initialPosition + (rays[0]-initialPosition)/2;
 		
 		// Corners of chunk box collider
-		rays[2] = newChunkTrans.TransformPoint(new Vector3(1.5f,2,-0.25f));
-		rays[3] = newChunkTrans.TransformPoint(new Vector3(-1.5f,2,-0.25f));
-		rays[4] = newChunkTrans.TransformPoint(new Vector3(-1.5f,2,-1*newChunkCollider.size.z));
-		rays[5] = newChunkTrans.TransformPoint(new Vector3(1.5f,2,-1*newChunkCollider.size.z));
+		rays[2] = newChunkTrans.TransformPoint(new Vector3(6f,8,-0.25f));
+		rays[3] = newChunkTrans.TransformPoint(new Vector3(-6f,8,-0.25f));
+		rays[4] = newChunkTrans.TransformPoint(new Vector3(-6f,8,-1*newChunkCollider.size.z));
+		rays[5] = newChunkTrans.TransformPoint(new Vector3(6f,8,-1*newChunkCollider.size.z));
 					
 		for (int j = 0 ; j < rays.GetLength(0) ; j++) {
 			if (!(Physics.Raycast (rays[j], -Vector3.up, out hits[j]) && (String.Equals (hits[j].collider.gameObject.name, "Plane") || String.Equals(hits[j].collider.gameObject.name, chunk.transform.name)))) {
