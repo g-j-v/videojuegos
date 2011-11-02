@@ -41,7 +41,7 @@ public class RoadCreator : MonoBehaviour
 		putChunks(gameObject.transform, 0.0f, 0, -1);
 		firstChunk = transform.Find("part-0");
 		fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
-		fline.transform.position = firstChunk.Find("mountPoint").position;
+		fline.transform.position = firstChunk.position;
 	}
 	
 	private bool putChunks(Transform mountTransform, float rotY, int iter, int previdx) {
@@ -79,9 +79,11 @@ public class RoadCreator : MonoBehaviour
 			} else {
 				success = putChunks(mountPoint, rotY + mountPoint.localRotation.eulerAngles.y, iter+1, 
 									roadChunkIdx);
-					
+				
 				if (!success) {
 					DestroyImmediate(currChunk);	
+				} else {
+					currChunk.GetComponent<RoadChunk>().pCheckPointIdx = iter+1;
 				}
 			}
 		}
