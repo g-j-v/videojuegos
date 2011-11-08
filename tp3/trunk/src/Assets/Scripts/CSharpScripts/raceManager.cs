@@ -6,15 +6,18 @@ public class raceManager : MonoBehaviour {
 	public Texture2D redLight, yellowLight, greenLight;
 	public GameObject carGO;
 	private static int checkPointsDone, checkPointsQty;
-	private bool finishOnTime, start;
+	private bool finishOnTime, start, end;
 	private float timeLimit = 60.0f;
 	
 	// Use this for initialization
 	void Start () {
+		
 		roadCreator.GetComponent<RoadCreator>().Generate();
+		
 		checkPointsDone = 0;
 		checkPointsQty = roadCreator.transform.childCount;
-		start = false;
+		start = end = false;
+		timeLimit = SceneParameters.time;
 		Debug.Log(checkPointsQty);
 	}
 	
@@ -30,7 +33,15 @@ public class raceManager : MonoBehaviour {
 			carGO.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		}
 		
-		GUI.Label(new Rect(Screen.width - Screen.width * 0.1f, Screen.height * 0.1f, Screen.width * 0.1f, Screen.height * 0.1f), "Time Left: " + timeLimit);
+		if (timeLimit >= 0) {
+			GUI.Label(new Rect(Screen.width - Screen.width * 0.2f, Screen.height * 0.1f, Screen.width * 0.2f, Screen.height * 0.1f), "Time Left: " + timeLimit);
+		}
+		
+		if (finishOnTime && end) {
+			GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.3f, Screen.width * 0.2f, Screen.height * 0.20f), "You made it!");
+		} else if (!finishOnTime && end){
+			GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.3f, Screen.width * 0.2f, Screen.height * 0.20f), "You didn't make it!");
+		}
     }
 	
 	// Update is called once per frame
@@ -39,11 +50,12 @@ public class raceManager : MonoBehaviour {
 			if (timeLimit <= 0) {
 				Debug.Log("You've Lost!");
 				finishOnTime = false;
+				end = true;
 			}
 			
 			// Si paso por todos los checkpoints termino a tiempo la carrera (falta lo del tiempo)
 			if (checkPointsDone == checkPointsQty) {
-				finishOnTime = true;
+				finishOnTime = end = true;
 				Debug.Log("You've Won!");
 			} else {
 				timeLimit -= 1.0f * Time.deltaTime;
