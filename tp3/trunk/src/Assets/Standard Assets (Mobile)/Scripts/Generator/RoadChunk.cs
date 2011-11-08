@@ -12,7 +12,7 @@ public class RoadChunk : MonoBehaviour
 	}
 	
 	public void OnCollisionEnter(Collision collision) {
-		//raceManager.recieveCheckPoint(checkPointIdx);
+		raceManager.recieveCheckPoint(checkPointIdx);
 	}
 	
 }
