@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class RoadCreator : MonoBehaviour
+public class RoadCreator : MonoBehaviour  
 {
 	/// <summary>
 	/// Chunks of the road
@@ -27,10 +27,8 @@ public class RoadCreator : MonoBehaviour
 	public float lastRotY;
 	public int lastIdx;
 	
-	int counter = 0;
 	
 	public void Start() {
-		
 	}
 	
 	/// <summary>
@@ -38,39 +36,50 @@ public class RoadCreator : MonoBehaviour
 	/// </summary>
 	public void Generate ()
 	{
-		Transform firstChunk;
+		roadSize = SceneParameters.initialSize;
+		Transform firstChunk, veryLastChunk;
 		GameObject fline;
+		GameObject car = GameObject.Find("Car");
 		
 		// Initialization
 		rays = new Vector3[6];
 		hits = new RaycastHit[6];
 		bool done = false;
 		
+		
 		while(!done){
 			RemoveAll();
 			lastRotY=0.0f;
 			lastIdx=0;
 			putChunks(gameObject.transform, 0.0f, 0, -1);
+		
 			firstChunk = transform.Find("part-0");
-			fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
-			fline.transform.position = firstChunk.Find("mountPoint").position;
 			
-			counter=0;
-			
-			Debug.Log("Position:  " + transform.position);
-			Debug.Log("Size:  ");
 			AStarHelper astar = new AStarHelper(firstChunk, this);
 			done = astar.run();
 					
 			if(!done){
-			
 				Debug.Log("Trying again");
-			
 			}
-		//GameObject inicio = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-		//inicio.transform.position= firstChunk.position ;//- new Vector3(0,0,0.25f*firstChunk.GetComponent<BoxCollider>().size.z);
-		//Debug.Log(transform.position);
+			//GameObject inicio = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+			//inicio.transform.position= firstChunk.position ;//- new Vector3(0,0,0.25f*firstChunk.GetComponent<BoxCollider>().size.z);
+			//Debug.Log(transform.position);
 		}
+		
+		firstChunk = transform.Find("part-0");
+		
+		float carX = (firstChunk.position.x + firstChunk.GetComponent<RoadChunk>().mountPoint.transform.position.x)/2;
+		float carZ = (firstChunk.position.z + firstChunk.GetComponent<RoadChunk>().mountPoint.position.z)/2;
+		
+		car.transform.position = new Vector3(carX, firstChunk.position.y+0.01f, carZ);
+		car.transform.rotation=firstChunk.GetComponent<RoadChunk>().mountPoint.rotation;
+		car.transform.Rotate(new Vector3(0, 180, 0));//firstChunk.GetComponent<RoadChunk>().mountPoint.rotation.eulerAngles.y /2, 0));
+		
+		veryLastChunk = transform.GetChild(transform.GetChildCount() - 1 );
+		fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
+		fline.transform.position = new Vector3(1.5f,6f,7f);
+		fline.transform.rotation=new Quaternion(0,0,0,0);
+		fline.transform.Rotate(new Vector3(0, 90, 0));
 	}
 	
 	private bool putChunks(Transform mountTransform, float rotY, int iter, int previdx) {
