@@ -11,6 +11,7 @@ public class RoadCreator : MonoBehaviour
 	/// </summary>
 	public GameObject[] roadChunks;
 	public GameObject FinishLine;
+	private GameObject [] tempChunks;
 		
 	/// <summary>
 	/// Size of the road in number of chunks
@@ -18,9 +19,15 @@ public class RoadCreator : MonoBehaviour
 	public int roadSize = 10;
 	
 	
-	private Transform mountTransform;
+	//private Transform mountTransform;
 	private Vector3[] rays;
 	private RaycastHit[] hits;
+	
+	public Transform lastChunk;
+	public float lastRotY;
+	public int lastIdx;
+	
+	int counter = 0;
 	
 	public void Start() {
 		
@@ -37,11 +44,33 @@ public class RoadCreator : MonoBehaviour
 		// Initialization
 		rays = new Vector3[6];
 		hits = new RaycastHit[6];
+		bool done = false;
 		
-		putChunks(gameObject.transform, 0.0f, 0, -1);
-		firstChunk = transform.Find("part-0");
-		fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
-		fline.transform.position = firstChunk.position;
+		while(!done){
+			RemoveAll();
+			lastRotY=0.0f;
+			lastIdx=0;
+			putChunks(gameObject.transform, 0.0f, 0, -1);
+			firstChunk = transform.Find("part-0");
+			fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
+			fline.transform.position = firstChunk.Find("mountPoint").position;
+			
+			counter=0;
+			
+			Debug.Log("Position:  " + transform.position);
+			Debug.Log("Size:  ");
+			AStarHelper astar = new AStarHelper(firstChunk, this);
+			done = astar.run();
+					
+			if(!done){
+			
+				Debug.Log("Trying again");
+			
+			}
+		//GameObject inicio = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+		//inicio.transform.position= firstChunk.position ;//- new Vector3(0,0,0.25f*firstChunk.GetComponent<BoxCollider>().size.z);
+		//Debug.Log(transform.position);
+		}
 	}
 	
 	private bool putChunks(Transform mountTransform, float rotY, int iter, int previdx) {
@@ -53,6 +82,9 @@ public class RoadCreator : MonoBehaviour
 		
 		// End Condition
 		if (iter >= roadSize) {
+			lastIdx=previdx;
+			lastChunk=mountTransform;
+			lastRotY=rotY;
 			return true;
 		}
 			
@@ -79,11 +111,9 @@ public class RoadCreator : MonoBehaviour
 			} else {
 				success = putChunks(mountPoint, rotY + mountPoint.localRotation.eulerAngles.y, iter+1, 
 									roadChunkIdx);
-				
+					
 				if (!success) {
 					DestroyImmediate(currChunk);	
-				} else {
-					currChunk.GetComponent<RoadChunk>().pCheckPointIdx = iter+1;
 				}
 			}
 		}
@@ -100,7 +130,7 @@ public class RoadCreator : MonoBehaviour
 		}
 	}
 	
-	private bool putChunk(Transform mountTransform, float rotY, GameObject chunk) {
+	public bool putChunk(Transform mountTransform, float rotY, GameObject chunk) {
 		Transform newChunkTrans, newChunkMount;
 		BoxCollider newChunkCollider;	
 		
@@ -131,8 +161,17 @@ public class RoadCreator : MonoBehaviour
 		rays[5] = newChunkTrans.TransformPoint(new Vector3(6f,8,-1*newChunkCollider.size.z));
 					
 		for (int j = 0 ; j < rays.GetLength(0) ; j++) {
+			
 			if (!(Physics.Raycast (rays[j], -Vector3.up, out hits[j]) && (String.Equals (hits[j].collider.gameObject.name, "Plane") || String.Equals(hits[j].collider.gameObject.name, chunk.transform.name)))) {
-				overlap = true;
+			//	GameObject inicio = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+			//	inicio.transform.position= new Vector3(rays[j].x,0,rays[j].z);
+			//	inicio.collider.enabled=false;
+				
+				Debug.Log(hits[j].collider.gameObject.name);
+				if(!(hits[j].collider.gameObject.name.Equals("part-0"))){
+				   
+					overlap = true;
+				}
 			}
 		}
 		
@@ -161,5 +200,29 @@ public class RoadCreator : MonoBehaviour
 		}
 			    
 		return idx;
+	}
+	
+	public void closePath(ArrayList path, Transform mountTransform, float rotY, int iter) {
+		GameObject currChunk;
+		Transform mountPoint;
+		int roadChunkIdx;
+		
+		// End Condition
+		if (iter >= path.Count) {
+			return;
+		}
+				
+		object[] indexes =path.ToArray() ;
+		roadChunkIdx = (int)indexes[iter];
+		currChunk = UnityEngine.Object.Instantiate (roadChunks[roadChunkIdx]) as GameObject;	
+		currChunk.name = String.Format ("part-{0}", roadSize+iter);
+		currChunk.transform.parent = transform;
+		
+		mountPoint = currChunk.GetComponent<RoadChunk>().mountPoint;
+		putChunk(mountTransform, rotY, currChunk);
+		
+		closePath(path, mountPoint, rotY + mountPoint.localRotation.eulerAngles.y, iter+1);
+					
+		return;
 	}
 }
