@@ -1,0 +1,7 @@
+fileFormatVersion: 1
+guid: 457240cd0bff2af40990229fa67f663f
+MonoImporter:
+  importerVersion: 1
+  defaultReferences:
+    gSkin: {fileID: 11400000, guid: 00000000000000000000000000000000, type: 0}
+    backdrop: {fileID: 2800000, guid: f33d2cfb58f725c48be6e9396b5ff236, type: 1}
