@@ -113,7 +113,9 @@ public class RoadCreator : MonoBehaviour
 									roadChunkIdx);
 					
 				if (!success) {
-					DestroyImmediate(currChunk);	
+					DestroyImmediate(currChunk);    
+				} else {
+					currChunk.GetComponent<RoadChunk>().pCheckPointIdx = iter+1;
 				}
 			}
 		}
