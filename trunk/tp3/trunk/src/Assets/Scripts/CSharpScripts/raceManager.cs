@@ -31,13 +31,7 @@ public class raceManager : MonoBehaviour {
 			putCheckPoint(10*i);
 		}
 		
-		if(10*checkPointsQty<=roadCreator.transform.childCount){
-			putCheckPoint(roadCreator.transform.childCount -1);
-		}
-		
-		
 		CheckPoint.currCheck = 0;
-		
 		
 		start = end = false;
 		timeLimit = SceneParameters.time;
@@ -49,11 +43,11 @@ public class raceManager : MonoBehaviour {
 			Transform mountpoint = currChunk.GetComponent<RoadChunk>().mountPoint;
 			
 			GameObject fline = UnityEngine.Object.Instantiate(CheckPointLine) as GameObject;
-			Vector3 planePos = (currChunk.transform.position + mountpoint.position)/2;
-			
+			Vector3 planePos=mountpoint.position;
 			fline.transform.position = new Vector3(planePos.x, 6f, planePos.z);
-			fline.transform.rotation=currChunk.transform.rotation;
-			fline.transform.Rotate (new Vector3 (0, Quaternion.Angle(currChunk.transform.rotation, mountpoint.transform.rotation)/2, 0));
+			fline.transform.rotation=mountpoint.transform.rotation;
+		
+			fline.GetComponent<CheckPoint>().checkidx = index/10;
 	}
 	
 	void OnGUI() {
