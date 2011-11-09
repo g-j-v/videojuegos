@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class raceManager : MonoBehaviour {
-	public GameObject roadCreator;
+	public GameObject roadCreator, firstCamera, thirdCamera;
 	public Texture2D redLight, yellowLight, greenLight;
 	public GameObject carGO;
 	private static int checkPointsDone, checkPointsQty;
@@ -47,6 +47,16 @@ public class raceManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (start) {
+			if (Input.GetKeyDown(KeyCode.F)) {
+				thirdCamera.GetComponent<Camera>().enabled = false;
+				firstCamera.GetComponent<Camera>().enabled = true;
+			}
+			
+			if (Input.GetKeyDown(KeyCode.T)) {
+				thirdCamera.GetComponent<Camera>().enabled = true;
+				firstCamera.GetComponent<Camera>().enabled = false;
+			}
+			
 			if (timeLimit <= 0) {
 				Debug.Log("You've Lost!");
 				finishOnTime = false;
