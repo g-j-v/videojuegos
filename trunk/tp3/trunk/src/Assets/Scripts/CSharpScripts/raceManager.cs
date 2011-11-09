@@ -4,6 +4,7 @@ using System.Collections;
 public class raceManager : MonoBehaviour {
 	public GUISkin gSkin;
 	public GameObject roadCreator, firstCamera, thirdCamera;
+	public GameObject CheckPointLine;
 	public Texture2D redLight, yellowLight, greenLight;
 	public GameObject carGO;
 	private static int checkPointsDone, checkPointsQty;
@@ -18,15 +19,43 @@ public class raceManager : MonoBehaviour {
 		invocationTime = Time.time;
 		
 		roadCreator.GetComponent<RoadCreator>().Generate();
+		
 		resetTime=0f;
 		
 		checkPointsDone = 0;
-		checkPointsQty = roadCreator.transform.childCount;
+		checkPointsQty = (int)(roadCreator.transform.childCount/10);
+		
+		CheckPoint.checkPoints = new Transform[checkPointsQty];
+		
+		for(int i =0; i<checkPointsQty; i++){
+			putCheckPoint(10*i);
+		}
+		
+		if(10*checkPointsQty<=roadCreator.transform.childCount){
+			putCheckPoint(roadCreator.transform.childCount -1);
+		}
+		
+		
+		CheckPoint.currCheck = 0;
+		
+		
 		start = end = false;
 		timeLimit = SceneParameters.time;
 		timeLimit = SceneParameters.time;
 		
 		Debug.Log(checkPointsQty);
+	}
+	
+	void putCheckPoint(int index){
+			Transform currChunk = roadCreator.GetComponent<RoadCreator>().transform.GetChild(index);
+			Transform mountpoint = currChunk.GetComponent<RoadChunk>().mountPoint;
+			
+			GameObject fline = UnityEngine.Object.Instantiate(CheckPointLine) as GameObject;
+			Vector3 planePos = (currChunk.transform.position + mountpoint.position)/2;
+			
+			fline.transform.position = new Vector3(planePos.x, 6f, planePos.z);
+			fline.transform.rotation=currChunk.transform.rotation;
+			fline.transform.Rotate (new Vector3 (0, Quaternion.Angle(currChunk.transform.rotation, mountpoint.transform.rotation)/2, 0));
 	}
 	
 	void OnGUI() {
@@ -91,7 +120,7 @@ public class raceManager : MonoBehaviour {
 				timeLimit -= 1.0f * Time.deltaTime;
 			}
 		} else {
-			if (Time.time - invocationTime > 1f) {
+			if (Time.time > 0.7f) {
 				carGO.GetComponent<Rigidbody>().constraints = carGO.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			}
 		}

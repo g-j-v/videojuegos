@@ -21,7 +21,7 @@ public class CheckPoint : MonoBehaviour {
         if (other.gameObject.layer.Equals("car")) {
 			checkPoints[checkidx].Find("finishSign").renderer.material = farCheck;
 			currCheck++;
-			if (checkidx + 1 <= checkPoints.Length) {
+			if (checkidx + 1 < checkPoints.Length) {
 				checkPoints[checkidx+1].Find("finishSign").renderer.material = nextCheck;
 			}
 		}
