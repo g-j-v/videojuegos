@@ -65,7 +65,7 @@ public class raceManager : MonoBehaviour {
 		}
 		
 		if (timeLimit >= 0) {
-			GUI.Label(new Rect(Screen.width - Screen.width * 0.2f, Screen.height * 0.1f, Screen.width * 0.2f, Screen.height * 0.1f), "Time Left: " + timeLimit);
+			GUI.Label(new Rect(Screen.width - Screen.width * 0.8f, Screen.height * 0.1f, Screen.width * 0.2f, Screen.height * 0.1f), "Time Left: " + timeLimit);
 		}
 		
 		if(end){
