@@ -25,10 +25,10 @@ public class raceManager : MonoBehaviour {
 		checkPointsDone = 0;
 		checkPointsQty = (int)(roadCreator.transform.childCount/10);
 		
-		CheckPoint.checkPoints = new Transform[checkPointsQty];
+		CheckPoint.checkPoints = new GameObject[checkPointsQty];
 		
 		for(int i =0; i<checkPointsQty; i++){
-			putCheckPoint(10*i);
+			putCheckPoint(i);
 		}
 		
 		CheckPoint.currCheck = 0;
@@ -39,7 +39,7 @@ public class raceManager : MonoBehaviour {
 	}
 	
 	void putCheckPoint(int index){
-			Transform currChunk = roadCreator.GetComponent<RoadCreator>().transform.GetChild(index);
+			Transform currChunk = roadCreator.GetComponent<RoadCreator>().transform.GetChild(index*10);
 			Transform mountpoint = currChunk.GetComponent<RoadChunk>().mountPoint;
 			
 			GameObject fline = UnityEngine.Object.Instantiate(CheckPointLine) as GameObject;
@@ -47,7 +47,8 @@ public class raceManager : MonoBehaviour {
 			fline.transform.position = new Vector3(planePos.x, 6f, planePos.z);
 			fline.transform.rotation=mountpoint.transform.rotation;
 		
-			fline.GetComponent<CheckPoint>().checkidx = index/10;
+			fline.GetComponent<CheckPoint>().checkidx = index;
+			CheckPoint.checkPoints[index]=fline;
 	}
 	
 	void OnGUI() {
