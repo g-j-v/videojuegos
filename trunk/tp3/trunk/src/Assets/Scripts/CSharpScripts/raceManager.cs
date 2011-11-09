@@ -41,8 +41,6 @@ public class raceManager : MonoBehaviour {
 		
 		start = end = false;
 		timeLimit = SceneParameters.time;
-		timeLimit = SceneParameters.time;
-		
 		Debug.Log(checkPointsQty);
 	}
 	
