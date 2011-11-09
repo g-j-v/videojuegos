@@ -76,11 +76,10 @@ public class RoadCreator : MonoBehaviour
 		car.transform.rotation = firstChunk.GetComponent<RoadChunk> ().mountPoint.rotation;
 		car.transform.Rotate (new Vector3 (0, 180, 0));
 		//firstChunk.GetComponent<RoadChunk>().mountPoint.rotation.eulerAngles.y /2, 0));
-		veryLastChunk = transform.GetChild (transform.GetChildCount () - 1);
-		fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
-		fline.transform.position = new Vector3 (1.5f, 6f, 7f);
-		fline.transform.rotation = new Quaternion (0, 0, 0, 0);
-		fline.transform.Rotate (new Vector3 (0, 90, 0));
+		//fline = UnityEngine.Object.Instantiate (FinishLine) as GameObject;
+		//fline.transform.position = new Vector3 (1.5f, 6f, 7f);
+		//fline.transform.rotation = new Quaternion (0, 0, 0, 0);
+		//fline.transform.Rotate (new Vector3 (0, 90, 0));
 	}
 
 	private bool putChunks (Transform mountTransform, float rotY, int iter, int previdx)
