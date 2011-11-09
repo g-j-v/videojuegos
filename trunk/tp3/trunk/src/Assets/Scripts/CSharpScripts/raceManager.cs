@@ -26,7 +26,7 @@ public class raceManager : MonoBehaviour {
 		checkPointsQty = (int)(roadCreator.transform.childCount/10);
 		
 		CheckPoint.checkPoints = new GameObject[checkPointsQty];
-		
+		Debug.Log("Cantidad checks: " + checkPointsQty);
 		for(int i =0; i<checkPointsQty; i++){
 			putCheckPoint(i);
 		}
@@ -106,7 +106,7 @@ public class raceManager : MonoBehaviour {
 			}
 			
 			// Si paso por todos los checkpoints termino a tiempo la carrera (falta lo del tiempo)
-			if (checkPointsDone == checkPointsQty + 1) {
+			if (checkPointsDone == checkPointsQty) {
 				finishOnTime = end = true;
 				Debug.Log("You've Won!");
 			} else {
