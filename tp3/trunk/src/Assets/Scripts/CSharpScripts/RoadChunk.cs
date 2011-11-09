@@ -12,10 +12,6 @@ public class RoadChunk : MonoBehaviour
 	}
 	
 	public void OnCollisionEnter(Collision collision) {
-		if (collision.gameObject.layer.Equals("Default")) {
-			Debug.Log("Destruyendo objeto!");
-			DestroyImmediate(collision.gameObject);
-		}
 		//raceManager.recieveCheckPoint(checkPointIdx);
 	}
 	

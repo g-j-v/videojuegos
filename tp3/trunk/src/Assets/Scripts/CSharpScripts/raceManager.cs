@@ -106,25 +106,21 @@ public class raceManager : MonoBehaviour {
 			}
 			
 			// Si paso por todos los checkpoints termino a tiempo la carrera (falta lo del tiempo)
-			if (checkPointsDone == checkPointsQty) {
+			if (checkPointsDone == checkPointsQty + 1) {
 				finishOnTime = end = true;
 				Debug.Log("You've Won!");
 			} else {
 				timeLimit -= 1.0f * Time.deltaTime;
 			}
 		} else {
-			if (Time.time > 0.7f) {
+			if (Time.time - invocationTime > 1f) {
 				carGO.GetComponent<Rigidbody>().constraints = carGO.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			}
 		}
 	}
 	
-	public static void recieveCheckPoint(int chkidx) {
-		if (chkidx - checkPointsDone == 1) {
-			checkPointsDone++;
-			Debug.Log("checkpoint! " + checkPointsDone);
-		} else {
-			Debug.Log("la pifie");
-		}
+	public static void receiveCheckPoint() {
+		checkPointsDone++;
+		Debug.Log(checkPointsDone);
 	}
 }
