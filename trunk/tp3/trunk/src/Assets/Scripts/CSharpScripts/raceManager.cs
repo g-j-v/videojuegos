@@ -91,7 +91,7 @@ public class raceManager : MonoBehaviour {
 				timeLimit -= 1.0f * Time.deltaTime;
 			}
 		} else {
-			if (Time.time > 0.7f) {
+			if (Time.time - invocationTime > 1f) {
 				carGO.GetComponent<Rigidbody>().constraints = carGO.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			}
 		}
