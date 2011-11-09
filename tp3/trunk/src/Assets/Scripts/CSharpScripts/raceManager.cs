@@ -2,26 +2,32 @@ using UnityEngine;
 using System.Collections;
 
 public class raceManager : MonoBehaviour {
+	public GUISkin gSkin;
 	public GameObject roadCreator, firstCamera, thirdCamera;
 	public Texture2D redLight, yellowLight, greenLight;
 	public GameObject carGO;
 	private static int checkPointsDone, checkPointsQty;
 	private bool finishOnTime, start, end;
 	private float timeLimit = 60.0f;
+	float resetTime;
 	
 	// Use this for initialization
 	void Start () {
 		
+		
 		roadCreator.GetComponent<RoadCreator>().Generate();
+		resetTime=0f;
 		
 		checkPointsDone = 0;
 		checkPointsQty = roadCreator.transform.childCount;
 		start = end = false;
 		timeLimit = SceneParameters.time;
+		timeLimit=SceneParameters.time;
 		Debug.Log(checkPointsQty);
 	}
 	
 	void OnGUI() {
+		GUI.skin = gSkin;
 		if (Time.time < 2.0f) {
         	GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.05f, Screen.width * 0.10f, Screen.height * 0.20f), redLight);
 		} else if (Time.time < 4.0f) {
@@ -37,10 +43,21 @@ public class raceManager : MonoBehaviour {
 			GUI.Label(new Rect(Screen.width - Screen.width * 0.2f, Screen.height * 0.1f, Screen.width * 0.2f, Screen.height * 0.1f), "Time Left: " + timeLimit);
 		}
 		
-		if (finishOnTime && end) {
-			GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.3f, Screen.width * 0.2f, Screen.height * 0.20f), "You made it!");
-		} else if (!finishOnTime && end){
-			GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.3f, Screen.width * 0.2f, Screen.height * 0.20f), "You didn't make it!");
+		if(end){
+			if (resetTime == 0) {
+				resetTime = Time.time;
+			}
+			
+			if (finishOnTime) {
+				GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.3f, Screen.width * 0.2f, Screen.height * 0.20f), "You made it!", "mainMenuTitle");
+			} else if (!finishOnTime){
+				GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.3f, Screen.width * 0.2f, Screen.height * 0.20f), "You didn't make it!", "mainMenuTitle");
+			}
+			
+			if (Time.time > resetTime + 5) {
+				Application.LoadLevel("GUIScene");
+			}
+		
 		}
     }
 	
