@@ -47,6 +47,7 @@ public class StartMenuGUI: MonoBehaviour {
 					isLoading = true;
 					SceneParameters.initialSize = 10;
 					SceneParameters.time=40.0f;
+					
 					Application.LoadLevel("Scene1");
 				}
 				
@@ -63,6 +64,7 @@ public class StartMenuGUI: MonoBehaviour {
 					isLoading = true;
 					SceneParameters.initialSize=50;
 					SceneParameters.time=100.0f;
+					
 					Application.LoadLevel("Scene1");
 				}
 				

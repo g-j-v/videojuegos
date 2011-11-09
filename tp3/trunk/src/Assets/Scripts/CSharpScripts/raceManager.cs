@@ -9,11 +9,13 @@ public class raceManager : MonoBehaviour {
 	private static int checkPointsDone, checkPointsQty;
 	private bool finishOnTime, start, end;
 	private float timeLimit = 60.0f;
+	private float invocationTime;
 	float resetTime;
 	
 	// Use this for initialization
 	void Start () {
 		
+		invocationTime = Time.time;
 		
 		roadCreator.GetComponent<RoadCreator>().Generate();
 		resetTime=0f;
@@ -22,18 +24,19 @@ public class raceManager : MonoBehaviour {
 		checkPointsQty = roadCreator.transform.childCount;
 		start = end = false;
 		timeLimit = SceneParameters.time;
-		timeLimit=SceneParameters.time;
+		timeLimit = SceneParameters.time;
+		
 		Debug.Log(checkPointsQty);
 	}
 	
 	void OnGUI() {
 		GUI.skin = gSkin;
-		if (Time.time < 2.0f) {
+		if (Time.time-invocationTime < 2.0f) {
         	GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.05f, Screen.width * 0.10f, Screen.height * 0.20f), redLight);
-		} else if (Time.time < 4.0f) {
+		} else if (Time.time-invocationTime < 4.0f) {
 			GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.05f, Screen.width * 0.10f, Screen.height * 0.20f), yellowLight);
 			
-		} else if (Time.time < 6.0f) {
+		} else if (Time.time-invocationTime < 6.0f) {
 			GUI.Label(new Rect(Screen.width * 0.5f, Screen.height * 0.05f, Screen.width * 0.10f, Screen.height * 0.20f), greenLight);
 			start = true;
 			carGO.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
