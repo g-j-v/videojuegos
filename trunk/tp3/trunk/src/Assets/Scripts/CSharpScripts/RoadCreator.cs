@@ -182,7 +182,6 @@ public class RoadCreator : MonoBehaviour
 				if (hits[j].collider == null) {
 					overlap = true;
 				} else {
-					Debug.Log (hits[j].collider.gameObject.name);
 					if (!(hits[j].collider.gameObject.name.Equals ("part-0"))) {
 						
 						overlap = true;

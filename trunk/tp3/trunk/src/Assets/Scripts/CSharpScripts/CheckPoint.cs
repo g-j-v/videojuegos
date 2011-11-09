@@ -18,12 +18,22 @@ public class CheckPoint : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider other) {
-        if (other.gameObject.layer.Equals("car")) {
-		//	checkPoints[checkidx].Find("finishSign").renderer.material = farCheck;
-			currCheck++;
-			if (checkidx + 1 < checkPoints.Length) {
-		//		checkPoints[checkidx+1].Find("finishSign").renderer.material = nextCheck;
+        if (other.gameObject.layer == 8) {
+			if (checkidx - 1 == currCheck) {
+				checkPoints[checkidx].transform.Find("finishSign").renderer.material = farCheck;
+				currCheck++;
+				raceManager.receiveCheckPoint();
+				if (checkidx + 1 < checkPoints.Length) {
+					checkPoints[checkidx+1].transform.Find("finishSign").renderer.material = nextCheck;
+				}
 			}
+			
+			// segunda pasada por el checkpoint inicial
+			if (currCheck == checkPoints.Length && checkidx == 0) {
+				currCheck++;
+				raceManager.receiveCheckPoint();
+			}
+			
 		}
     }
 }
