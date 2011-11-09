@@ -19,17 +19,16 @@ public class CheckPoint : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == 8) {
+			Debug.Log("Pasando por: " + checkidx + " currcheck: " + currCheck);
 			if (checkidx - 1 == currCheck) {
 				checkPoints[checkidx].transform.Find("finishSign").renderer.material = farCheck;
 				currCheck++;
 				raceManager.receiveCheckPoint();
-				if (checkidx + 1 < checkPoints.Length) {
-					checkPoints[checkidx+1].transform.Find("finishSign").renderer.material = nextCheck;
-				}
+				checkPoints[(checkidx+1)%checkPoints.Length].transform.Find("finishSign").renderer.material = nextCheck;
 			}
 			
 			// segunda pasada por el checkpoint inicial
-			if (currCheck == checkPoints.Length && checkidx == 0) {
+			if (currCheck == checkPoints.Length - 1 && checkidx == 0) {
 				currCheck++;
 				raceManager.receiveCheckPoint();
 			}
